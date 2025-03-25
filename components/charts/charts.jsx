@@ -115,65 +115,45 @@ export function LineChart({ data }) {
 }
 
 // Pie Chart Component
-export function PieChart({ data }) {
-  const canvasRef = useRef(null)
-
-  useEffect(() => {
-    if (!canvasRef.current) return
-
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    // Set dimensions
-    const width = canvas.width
-    const height = canvas.height
-    const centerX = width / 2
-    const centerY = height / 2
-    const radius = Math.min(centerX, centerY) - 10
-
-    // Calculate total
-    const total = data.reduce((sum, item) => sum + item.value, 0)
-
-    // Draw pie
-    let startAngle = 0
-
-    data.forEach((item, index) => {
-      const sliceAngle = (2 * Math.PI * item.value) / total
-
-      // Slice
-      ctx.beginPath()
-      ctx.moveTo(centerX, centerY)
-      ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle)
-      ctx.closePath()
-
-      ctx.fillStyle = item.color || `hsl(${index * 137.5}, 70%, 60%)`
-      ctx.fill()
-
-      // Label
-      const labelAngle = startAngle + sliceAngle / 2
-      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7)
-      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7)
-
-      ctx.fillStyle = "#fff"
-      ctx.font = "bold 12px sans-serif"
-      ctx.textAlign = "center"
-      ctx.textBaseline = "middle"
-      ctx.fillText(item.name, labelX, labelY)
-
-      startAngle += sliceAngle
-    })
-
-    // Draw center circle (donut style)
-    ctx.beginPath()
-    ctx.arc(centerX, centerY, radius * 0.4, 0, 2 * Math.PI)
-    ctx.fillStyle = "#fff"
-    ctx.fill()
-  }, [data])
-
-  return <canvas ref={canvasRef} width="300" height="150" />
+export function PieChart({ data = pieData, height = 400 }) {
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <RechartsPieChart>
+        <Pie
+          data={data}
+          cx="50%"
+          cy="50%"
+          innerRadius={80}
+          outerRadius={150}
+          dataKey="value"
+          labelLine={false}
+          label={({ name, percent, x, y }) => (
+            <text
+              x={x}
+              y={y}
+              fill={
+                name === "Present"
+                  ? "#059669" // Tailwind green-600
+                  : name === "Absent"
+                  ? "#ca8a04" // amber-600
+                  : "#dc2626" // red-600
+              }
+              fontSize={14}
+              fontWeight="bold"
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {`${name}: ${(percent * 100).toFixed(0)}%`}
+            </text>
+          )}
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend verticalAlign="bottom" height={36} />
+      </RechartsPieChart>
+    </ResponsiveContainer>
+  );
 }
-

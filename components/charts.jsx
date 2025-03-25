@@ -87,7 +87,8 @@ export function PieChart({ data = pieData, height = 300 }) {
           dataKey="value"
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+
           ))}
         </Pie>
         <Tooltip />

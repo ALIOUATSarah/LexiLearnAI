@@ -222,68 +222,130 @@ export default function TeacherDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {classData.students.map((student) => (
-                    <div
-                      key={student.id}
-                      className={`p-4 rounded-md border ${
-                        student.needsHelp ? "border-red-200 bg-red-50" : "border-gray-200"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Avatar>
-                            <AvatarFallback>
-                              {student.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">{student.name}</div>
-                            <div className="text-sm text-gray-500">ID: {student.id}</div>
-                          </div>
-                        </div>
-                        <Button size="sm" asChild>
-                          <Link href={`/student-report/${student.id}`}>View Report</Link>
-                        </Button>
-                      </div>
+                {classData.students.map((student) => {
+  const modes = ["Normal", "Dyslexia", "ADHD"]; // ✅ define it here
 
-                      <div className="mt-4 grid grid-cols-3 gap-4">
-                        <div>
-                          <div className="text-sm text-gray-500 mb-1">Progress</div>
-                          <Progress value={student.progress} className="h-2" />
-                          <div className="text-sm mt-1 font-medium">{student.progress}%</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500 mb-1">Attendance</div>
-                          <Progress value={student.attendance} className="h-2" />
-                          <div className="text-sm mt-1 font-medium">{student.attendance}%</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500 mb-1">Recommended Mode</div>
-                          <Badge
-                            variant="outline"
-                            className={`${
-                              student.recommendedMode === "Dyslexia"
-                                ? "bg-purple-50 text-purple-700 border-purple-200"
-                                : student.recommendedMode === "ADHD"
-                                  ? "bg-green-50 text-green-700 border-green-200"
-                                  : "bg-blue-50 text-blue-700 border-blue-200"
-                            }`}
-                          >
-                            {student.recommendedMode}
-                          </Badge>
-                        </div>
-                      </div>
+  const [selectedModeIndex, setSelectedModeIndex] = useState(modes.indexOf(student.recommendedMode));
+  const [currentModeIndex, setCurrentModeIndex] = useState(modes.indexOf(student.recommendedMode));
+  const [showConfirm, setShowConfirm] = useState(false);
 
-                      {student.needsHelp && (
-                        <div className="mt-3 text-sm text-red-600 font-medium">
-                          This student needs additional support. Performance is below average.
-                        </div>
-                      )}
-                    </div>
-                  ))}
+  const handleModeChange = (e) => {
+    setSelectedModeIndex(parseInt(e.target.value));
+    setShowConfirm(true);
+  };
+
+  const confirmChange = () => {
+    setCurrentModeIndex(selectedModeIndex);
+    setShowConfirm(false);
+  };
+
+  const cancelChange = () => {
+    setSelectedModeIndex(currentModeIndex);
+    setShowConfirm(false);
+  };
+
+  return (
+    <div
+      key={student.id}
+      className={`p-4 rounded-md border ${
+        student.needsHelp ? "border-red-200 bg-red-50" : "border-gray-200"
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>
+              {student.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="font-medium">{student.name}</div>
+            <div className="text-sm text-gray-500">ID: {student.id}</div>
+          </div>
+        </div>
+        <Button size="sm" asChild className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Link href={`/student-report/${student.id}`}>View Report</Link>
+        </Button>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Progress Circle */}
+        <div>
+          <div className="text-sm text-gray-500 mb-1">Progress</div>
+          <div className="relative w-16 h-16">
+            <svg viewBox="0 0 36 36" className="w-full h-full">
+              <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                stroke={student.progress < 50 ? "#ef4444" : student.progress <= 70 ? "#facc15" : "#22c55e"}
+                strokeWidth="4"
+                strokeDasharray="100"
+                strokeDashoffset={100 - student.progress}
+                strokeLinecap="round"
+                transform="rotate(-90 18 18)"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
+              {student.progress}%
+            </div>
+          </div>
+        </div>
+
+        {/* Attendance Bar */}
+        <div>
+          <div className="text-sm text-gray-500 mb-1">Attendance</div>
+          <div className="w-full h-3 bg-gray-200 rounded-full">
+            <div
+              className="h-3 bg-blue-500 rounded-full"
+              style={{ width: `${student.attendance}%` }}
+            ></div>
+          </div>
+          <p className="text-right text-sm font-semibold text-blue-600 mt-1">{student.attendance}%</p>
+        </div>
+
+        {/* Mode Dropdown */}
+        <div>
+          <div className="text-sm text-gray-500 mb-1">Recommended Mode</div>
+          <select
+            value={selectedModeIndex}
+            onChange={handleModeChange}
+            className="border border-blue-300 bg-white shadow-sm rounded-lg px-4 py-2 text-sm font-medium text-blue-700 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+          >
+            {modes.map((mode, index) => (
+              <option key={mode} value={index}>{mode}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {showConfirm && (
+        <div className="mt-4 p-4 border rounded bg-yellow-50 text-sm text-gray-700">
+          <p className="mb-2 font-medium">
+            Are you sure you want to switch to <strong className="text-blue-700">{modes[selectedModeIndex]}</strong> mode?
+          </p>
+          <div className="flex gap-4 justify-end">
+            <Button onClick={confirmChange} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 text-sm">Yes</Button>
+            <Button onClick={cancelChange} variant="outline" className="text-sm">Cancel</Button>
+          </div>
+        </div>
+      )}
+
+      {student.needsHelp && (
+        <div className="mt-3 text-sm text-red-600 font-medium">
+          This student needs additional support. Performance is below average.
+        </div>
+      )}
+    </div>
+  );
+})}
+
+                  
                 </div>
               </CardContent>
             </Card>
