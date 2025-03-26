@@ -1,19 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
-import { BarChart, LineChart, PieChart } from "@/components/charts"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { BarChart, LineChart, PieChart } from "@/components/charts";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function TeacherDashboard() {
-  const [activeTab, setActiveTab] = useState("students")
+  const [activeTab, setActiveTab] = useState("students");
 
-  // Fake class data
   const classData = {
     name: "Physics 101",
     teacher: "Ms. Sarah Johnson",
@@ -85,7 +84,7 @@ export default function TeacherDashboard() {
       { name: "Dyslexia", value: 35 },
       { name: "ADHD", value: 25 },
     ],
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
@@ -97,12 +96,9 @@ export default function TeacherDashboard() {
             </div>
             <h1 className="text-xl font-bold">LexiLearn AI</h1>
           </div>
-
-          <div className="flex items-center gap-4">
-            <Button variant="outline" className="border-blue-300 text-blue-600" asChild>
-              <Link href="/login">Logout</Link>
-            </Button>
-          </div>
+          <Button variant="outline" className="border-blue-300 text-blue-600" asChild>
+            <Link href="/login">Logout</Link>
+          </Button>
         </div>
       </header>
 
@@ -127,7 +123,8 @@ export default function TeacherDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* ✅ FIXED GRID */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 items-stretch">
           <Card className="border-t-4 border-t-blue-500 hover:shadow-lg transition-all duration-200">
             <CardHeader className="pb-2 bg-blue-50">
               <CardTitle className="text-lg font-medium text-blue-700">Class Overview</CardTitle>
@@ -143,7 +140,7 @@ export default function TeacherDashboard() {
                   <span className="font-medium">
                     {Math.round(
                       classData.students.reduce((acc, student) => acc + student.progress, 0) /
-                        classData.students.length,
+                        classData.students.length
                     )}
                     %
                   </span>
@@ -153,7 +150,7 @@ export default function TeacherDashboard() {
                   <span className="font-medium">
                     {Math.round(
                       classData.students.reduce((acc, student) => acc + student.attendance, 0) /
-                        classData.students.length,
+                        classData.students.length
                     )}
                     %
                   </span>
@@ -198,11 +195,17 @@ export default function TeacherDashboard() {
                   data={classData.modeDistribution.map((item) => ({
                     name: item.name,
                     value: item.value,
-                    color: item.name === "Normal" ? "#3b82f6" : item.name === "Dyslexia" ? "#8b5cf6" : "#10b981",
+                    color:
+                      item.name === "Normal"
+                        ? "#3b82f6"
+                        : item.name === "Dyslexia"
+                        ? "#8b5cf6"
+                        : "#10b981",
                   }))}
                 />
               </div>
-              <div className="mt-4 text-center text-sm font-medium bg-purple-50 p-2 rounded-md text-purple-600">
+              {/* ✅ LEGEND FIXED */}
+              <div className="mt-4 text-center text-sm font-medium bg-purple-50 p-2 rounded-md text-purple-600 whitespace-nowrap overflow-hidden text-ellipsis">
                 {classData.modeDistribution.sort((a, b) => b.value - a.value)[0].name} is the most common mode
               </div>
             </CardContent>
@@ -311,7 +314,7 @@ export default function TeacherDashboard() {
 
         {/* Mode Dropdown */}
         <div>
-          <div className="text-sm text-gray-500 mb-1">Recommended Mode</div>
+          <div className="text-sm text-gray-500 mb-1">Mode</div>
           <select
             value={selectedModeIndex}
             onChange={handleModeChange}

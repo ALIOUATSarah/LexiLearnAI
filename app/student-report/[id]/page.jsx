@@ -29,12 +29,38 @@ export default function StudentReport() {
       performance: 88,
       needsHelp: false,
       courses: [
-        { name: "Physics", progress: 95, mode: "Dyslexia" },
-        { name: "Mathematics", progress: 75, mode: "Normal" },
-        { name: "Biology", progress: 60, mode: "ADHD" },
-        { name: "Chemistry", progress: 40, mode: "Normal" },
-        { name: "History", progress: 85, mode: "Dyslexia" },
+        {
+          name: "Physics",
+          progress: 95,
+        
+          message: "Excellent progress – keep up the momentum",
+        },
+        {
+          name: "Mathematics",
+          progress: 96,
+         
+          message: "Good effort – complete remaining problem sets",
+        },
+        {
+          name: "Biology",
+          progress: 92,
+          
+          message: "Well-rounded progress across science and humanities",
+        },
+        {
+          name: "Chemistry",
+          progress: 98,
+         
+          message: "Learning patterns indicate strong focus and retention.",
+        },
+        {
+          name: "History",
+          progress: 97,
+          
+          message: "Strong comprehension – consistent effort noticed",
+        },
       ],
+      
       weeklyActivity: [
         { day: "Mon", minutes: 45 },
         { day: "Tue", minutes: 60 },
@@ -67,12 +93,38 @@ export default function StudentReport() {
       performance: 52,
       needsHelp: true,
       courses: [
-        { name: "Physics", progress: 45, mode: "Normal" },
-        { name: "Mathematics", progress: 38, mode: "Normal" },
-        { name: "Biology", progress: 62, mode: "ADHD" },
-        { name: "Chemistry", progress: 40, mode: "Normal" },
-        { name: "History", progress: 55, mode: "ADHD" },
+        {
+          name: "Physics",
+          progress: 45,
+          
+          message: "Incomplete practice tasks",
+        },
+        {
+          name: "Mathematics",
+          progress: 38,
+          
+          message: "Low engagement — review sessions recommended",
+        },
+        {
+          name: "Biology",
+          progress: 62,
+         
+          message: "Incomplete assignments and low quiz performance",
+        },
+        {
+          name: "Chemistry",
+          progress: 40,
+          
+          message: "Learning objectives not yet met",
+        },
+        {
+          name: "History",
+          progress: 55,
+         
+          message: "Mid-level performance — potential to improve",
+        },
       ],
+      
       weeklyActivity: [
         { day: "Mon", minutes: 25 },
         { day: "Tue", minutes: 30 },
@@ -95,6 +147,13 @@ export default function StudentReport() {
         "Incorporate more gamified elements into learning",
       ],
     },
+    courses: [
+      { name: "Physics", progress: 47, message: "Incomplete practice tasks" },
+      { name: "Mathematics", progress: 30, message: "Low engagement — review sessions recommended" },
+      { name: "Biology", progress: 41, message: "Incomplete assignments and low quiz performance" },
+      { name: "Chemistry", progress: 59, message: "Learning objectives not yet met" },
+      { name: "History", progress: 70, message: "Mid-level performance — potential to improve" },
+    ],
   }
 
   const student = studentData[studentId]
@@ -259,21 +318,69 @@ export default function StudentReport() {
                 <CardTitle>Course Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {student.courses.map((course, index) => (
-                    <div key={index}>
-                      <div className="flex justify-between items-center mb-2">
-                        <div>
-                          <span className="font-medium">{course.name}</span>
-                          <span className="ml-2 text-xs px-2 py-1 rounded-full bg-gray-100">{course.mode} Mode</span>
-                        </div>
-                        <span className="text-sm font-medium">{course.progress}% Complete</span>
-                      </div>
-                      <Progress value={course.progress} className="h-2" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {student.courses.map((course, index) => {
+
+      let colorClasses = "";
+
+      if (course.progress < 50) {
+        colorClasses = "bg-red-100 text-red-700";
+      } else if (course.progress <= 70) {
+        colorClasses = "bg-yellow-100 text-yellow-700";
+      } else {
+        colorClasses = "bg-green-100 text-green-700";
+      }
+
+      return (
+        <div
+          key={index}
+          className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
+        >
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">{course.name}</h3>
+            <div className={`text-base px-3 py-1 rounded-full inline-block ${colorClasses}`}>
+              {course.message}
+            </div>
+          </div>
+
+          <div className="relative w-20 h-20">
+            <svg className="w-full h-full" viewBox="0 0 36 36">
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                stroke="#e5e7eb"
+                strokeWidth="4"
+              />
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                stroke={
+                  course.progress < 50
+                    ? "#ef4444"
+                    : course.progress <= 70
+                    ? "#facc15"
+                    : "#22c55e"
+                }
+                strokeWidth="4"
+                strokeDasharray="100"
+                strokeDashoffset={100 - course.progress}
+                strokeLinecap="round"
+                transform="rotate(-90 18 18)"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
+              {course.progress}%
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</CardContent>
             </Card>
           </TabsContent>
 
