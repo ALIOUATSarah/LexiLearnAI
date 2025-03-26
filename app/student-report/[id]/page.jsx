@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
-import { BarChart, LineChart } from "@/components/charts"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { BarChart, LineChart } from "@/components/charts";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function StudentReport() {
-  const params = useParams()
-  const router = useRouter()
-  const studentId = params.id
-  const [activeTab, setActiveTab] = useState("overview")
+  const params = useParams();
+  const router = useRouter();
+  const studentId = params.id;
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Fake student data (would come from API in a real app)
   const studentData = {
@@ -32,50 +32,49 @@ export default function StudentReport() {
         {
           name: "Physics",
           progress: 95,
-        
           message: "Excellent progress – keep up the momentum",
         },
         {
           name: "Mathematics",
           progress: 96,
-         
           message: "Good effort – complete remaining problem sets",
         },
         {
           name: "Biology",
           progress: 92,
-          
           message: "Well-rounded progress across science and humanities",
         },
         {
           name: "Chemistry",
           progress: 98,
-         
           message: "Learning patterns indicate strong focus and retention.",
         },
         {
           name: "History",
           progress: 97,
-          
           message: "Strong comprehension – consistent effort noticed",
         },
       ],
-      
+
       weeklyActivity: [
-        { day: "Mon", minutes: 45 },
-        { day: "Tue", minutes: 60 },
-        { day: "Wed", minutes: 30 },
-        { day: "Thu", minutes: 75 },
-        { day: "Fri", minutes: 50 },
-        { day: "Sat", minutes: 20 },
-        { day: "Sun", minutes: 15 },
+        { name: "Mon", value: 45 },
+        { name: "Tue", value: 60 },
+        { name: "Wed", value: 30 },
+        { name: "Thu", value: 75 },
+        { name: "Fri", value: 50 },
+        { name: "Sat", value: 20 },
+        { name: "Sun", value: 15 },
       ],
       modePerformance: [
-        { mode: "Normal", score: 72 },
-        { mode: "Dyslexia", score: 88 },
-        { mode: "ADHD", score: 65 },
+        { name: "Normal", value: 72, color: "#3b82f6" },
+        { name: "Dyslexia", value: 88, color: "#8b5cf6" },
+        { name: "ADHD", value: 65, color: "#10b981" },
       ],
-      strengths: ["Visual learning", "Reading comprehension", "Problem-solving"],
+      strengths: [
+        "Visual learning",
+        "Reading comprehension",
+        "Problem-solving",
+      ],
       weaknesses: ["Timed tests", "Verbal explanations"],
       recommendations: [
         "Continue using Dyslexia mode for text-heavy subjects",
@@ -96,67 +95,63 @@ export default function StudentReport() {
         {
           name: "Physics",
           progress: 45,
-          
           message: "Incomplete practice tasks",
         },
         {
           name: "Mathematics",
           progress: 38,
-          
           message: "Low engagement — review sessions recommended",
         },
         {
           name: "Biology",
           progress: 62,
-         
           message: "Incomplete assignments and low quiz performance",
         },
         {
           name: "Chemistry",
           progress: 40,
-          
           message: "Learning objectives not yet met",
         },
         {
           name: "History",
           progress: 55,
-         
           message: "Mid-level performance — potential to improve",
         },
       ],
-      
+
       weeklyActivity: [
-        { day: "Mon", minutes: 25 },
-        { day: "Tue", minutes: 30 },
-        { day: "Wed", minutes: 15 },
-        { day: "Thu", minutes: 45 },
-        { day: "Fri", minutes: 20 },
-        { day: "Sat", minutes: 10 },
-        { day: "Sun", minutes: 5 },
+        { name: "Mon", value: 25 },
+        { name: "Tue", value: 30 },
+        { name: "Wed", value: 15 },
+        { name: "Thu", value: 45 },
+        { name: "Fri", value: 20 },
+        { name: "Sat", value: 10 },
+        { name: "Sun", value: 5 },
       ],
       modePerformance: [
-        { mode: "Normal", score: 48 },
-        { mode: "Dyslexia", score: 52 },
-        { mode: "ADHD", score: 68 },
+        { name: "Normal", value: 48, color: "#3b82f6" },
+        { name: "Dyslexia", value: 52, color: "#8b5cf6" },
+        { name: "ADHD", value: 68, color: "#10b981" },
       ],
-      strengths: ["Interactive learning", "Hands-on activities", "Creative thinking"],
-      weaknesses: ["Extended focus", "Text-heavy content", "Sequential instructions"],
+      strengths: [
+        "Interactive learning",
+        "Hands-on activities",
+        "Creative thinking",
+      ],
+      weaknesses: [
+        "Extended focus",
+        "Text-heavy content",
+        "Sequential instructions",
+      ],
       recommendations: [
         "Use ADHD mode for all subjects to improve engagement",
         "Break learning into shorter, more interactive segments",
         "Incorporate more gamified elements into learning",
       ],
     },
-    courses: [
-      { name: "Physics", progress: 47, message: "Incomplete practice tasks" },
-      { name: "Mathematics", progress: 30, message: "Low engagement — review sessions recommended" },
-      { name: "Biology", progress: 41, message: "Incomplete assignments and low quiz performance" },
-      { name: "Chemistry", progress: 59, message: "Learning objectives not yet met" },
-      { name: "History", progress: 70, message: "Mid-level performance — potential to improve" },
-    ],
-  }
+  };
 
-  const student = studentData[studentId]
+  const student = studentData[studentId];
 
   if (!student) {
     return (
@@ -168,7 +163,7 @@ export default function StudentReport() {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -183,7 +178,11 @@ export default function StudentReport() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="border-blue-300 text-blue-600" asChild>
+            <Button
+              variant="outline"
+              className="border-blue-300 text-blue-600"
+              asChild
+            >
               <Link href="/teacher-dashboard">Back to Dashboard</Link>
             </Button>
           </div>
@@ -206,10 +205,16 @@ export default function StudentReport() {
                 {student.name}
               </h1>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                <Badge
+                  variant="outline"
+                  className="bg-blue-50 text-blue-700 border-blue-200"
+                >
                   {student.grade}
                 </Badge>
-                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+                <Badge
+                  variant="outline"
+                  className="bg-gray-50 text-gray-700 border-gray-200"
+                >
                   ID: {student.id}
                 </Badge>
                 <Badge
@@ -217,8 +222,8 @@ export default function StudentReport() {
                     student.recommendedMode === "Dyslexia"
                       ? "bg-purple-100 text-purple-700 border-purple-200"
                       : student.recommendedMode === "ADHD"
-                        ? "bg-green-100 text-green-700 border-green-200"
-                        : "bg-blue-100 text-blue-700 border-blue-200"
+                      ? "bg-green-100 text-green-700 border-green-200"
+                      : "bg-blue-100 text-blue-700 border-blue-200"
                   }`}
                 >
                   Recommended: {student.recommendedMode} Mode
@@ -236,30 +241,52 @@ export default function StudentReport() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="border-t-4 border-t-blue-500 hover:shadow-lg transition-all duration-200">
             <CardHeader className="pb-2 bg-blue-50">
-              <CardTitle className="text-lg font-medium text-blue-700">Performance Overview</CardTitle>
+              <CardTitle className="text-lg font-medium text-blue-700">
+                Performance Overview
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">Overall Progress</span>
-                    <span className="text-sm font-medium">{student.progress}%</span>
+                    <span className="text-sm font-medium">
+                      Overall Progress
+                    </span>
+                    <span className="text-sm font-medium">
+                      {student.progress}%
+                    </span>
                   </div>
-                  <Progress value={student.progress} className="h-2" indicatorClassName="bg-blue-500" />
+                  <Progress
+                    value={student.progress}
+                    className="h-2"
+                    indicatorClassName="bg-blue-600"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm font-medium">Attendance</span>
-                    <span className="text-sm font-medium">{student.attendance}%</span>
+                    <span className="text-sm font-medium">
+                      {student.attendance}%
+                    </span>
                   </div>
-                  <Progress value={student.attendance} className="h-2" indicatorClassName="bg-green-500" />
+                  <Progress
+                    value={student.attendance}
+                    className="h-2"
+                    indicatorClassName="bg-green-600"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm font-medium">Performance</span>
-                    <span className="text-sm font-medium">{student.performance}%</span>
+                    <span className="text-sm font-medium">
+                      {student.performance}%
+                    </span>
                   </div>
-                  <Progress value={student.performance} className="h-2" indicatorClassName="bg-purple-500" />
+                  <Progress
+                    value={student.performance}
+                    className="h-2"
+                    indicatorClassName="bg-purple-600"
+                  />
                 </div>
               </div>
             </CardContent>
@@ -267,39 +294,41 @@ export default function StudentReport() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-medium">Learning Mode Effectiveness</CardTitle>
+              <CardTitle className="text-lg font-medium">
+                Learning Mode Effectiveness
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="h-[150px]">
-                <BarChart
-                  data={student.modePerformance.map((item) => ({
-                    name: item.mode,
-                    value: item.score,
-                  }))}
-                />
+            <CardContent className="p-4">
+              <div className="h-[180px]">
+                <BarChart data={student.modePerformance} height={180} />
               </div>
               <div className="mt-4 text-center text-sm font-medium text-blue-600">
-                {student.modePerformance.sort((a, b) => b.score - a.score)[0].mode} mode is most effective for{" "}
-                {student.name.split(" ")[0]}
+                {
+                  student.modePerformance.sort((a, b) => b.value - a.value)[0]
+                    .name
+                }{" "}
+                mode is most effective for {student.name.split(" ")[0]}
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-medium">Weekly Activity</CardTitle>
+              <CardTitle className="text-lg font-medium">
+                Weekly Activity
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="h-[150px]">
-                <LineChart
-                  data={student.weeklyActivity.map((item) => ({
-                    name: item.day,
-                    value: item.minutes,
-                  }))}
-                />
+            <CardContent className="p-4">
+              <div className="h-[180px]">
+                <LineChart data={student.weeklyActivity} height={180} />
               </div>
               <div className="mt-4 text-center text-sm font-medium">
-                Total: {student.weeklyActivity.reduce((acc, curr) => acc + curr.minutes, 0)} minutes this week
+                Total:{" "}
+                {student.weeklyActivity.reduce(
+                  (acc, curr) => acc + curr.value,
+                  0
+                )}{" "}
+                minutes this week
               </div>
             </CardContent>
           </Card>
@@ -318,69 +347,72 @@ export default function StudentReport() {
                 <CardTitle>Course Progress</CardTitle>
               </CardHeader>
               <CardContent>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {student.courses.map((course, index) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {student.courses.map((course, index) => {
+                    let colorClasses = "";
 
-      let colorClasses = "";
+                    if (course.progress < 50) {
+                      colorClasses = "bg-red-100 text-red-700";
+                    } else if (course.progress <= 70) {
+                      colorClasses = "bg-yellow-100 text-yellow-700";
+                    } else {
+                      colorClasses = "bg-green-100 text-green-700";
+                    }
 
-      if (course.progress < 50) {
-        colorClasses = "bg-red-100 text-red-700";
-      } else if (course.progress <= 70) {
-        colorClasses = "bg-yellow-100 text-yellow-700";
-      } else {
-        colorClasses = "bg-green-100 text-green-700";
-      }
+                    return (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
+                      >
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-semibold">
+                            {course.name}
+                          </h3>
+                          <div
+                            className={`text-sm px-3 py-1 rounded-full inline-block ${colorClasses}`}
+                          >
+                            {course.message}
+                          </div>
+                        </div>
 
-      return (
-        <div
-          key={index}
-          className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
-        >
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">{course.name}</h3>
-            <div className={`text-base px-3 py-1 rounded-full inline-block ${colorClasses}`}>
-              {course.message}
-            </div>
-          </div>
-
-          <div className="relative w-20 h-20">
-            <svg className="w-full h-full" viewBox="0 0 36 36">
-              <circle
-                cx="18"
-                cy="18"
-                r="16"
-                fill="none"
-                stroke="#e5e7eb"
-                strokeWidth="4"
-              />
-              <circle
-                cx="18"
-                cy="18"
-                r="16"
-                fill="none"
-                stroke={
-                  course.progress < 50
-                    ? "#ef4444"
-                    : course.progress <= 70
-                    ? "#facc15"
-                    : "#22c55e"
-                }
-                strokeWidth="4"
-                strokeDasharray="100"
-                strokeDashoffset={100 - course.progress}
-                strokeLinecap="round"
-                transform="rotate(-90 18 18)"
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
-              {course.progress}%
-            </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</CardContent>
+                        <div className="relative w-20 h-20">
+                          <svg className="w-full h-full" viewBox="0 0 36 36">
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              stroke="#e5e7eb"
+                              strokeWidth="4"
+                            />
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              stroke={
+                                course.progress < 50
+                                  ? "#ef4444"
+                                  : course.progress <= 70
+                                  ? "#facc15"
+                                  : "#22c55e"
+                              }
+                              strokeWidth="4"
+                              strokeDasharray="100"
+                              strokeDashoffset={100 - course.progress}
+                              strokeLinecap="round"
+                              transform="rotate(-90 18 18)"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
+                            {course.progress}%
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -404,7 +436,9 @@ export default function StudentReport() {
                   </div>
 
                   <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-                    <h3 className="font-bold text-red-700 mb-3">Areas for Improvement</h3>
+                    <h3 className="font-bold text-red-700 mb-3">
+                      Areas for Improvement
+                    </h3>
                     <ul className="space-y-2">
                       {student.weaknesses.map((weakness, index) => (
                         <li key={index} className="flex items-center gap-2">
@@ -426,7 +460,9 @@ export default function StudentReport() {
               </CardHeader>
               <CardContent>
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
-                  <h3 className="font-bold text-blue-700 mb-3">Teacher Recommendations</h3>
+                  <h3 className="font-bold text-blue-700 mb-3">
+                    Teacher Recommendations
+                  </h3>
                   <ul className="space-y-3">
                     {student.recommendations.map((recommendation, index) => (
                       <li key={index} className="flex items-start gap-2">
@@ -440,10 +476,12 @@ export default function StudentReport() {
                 </div>
 
                 <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-md">
-                  <h3 className="font-bold text-purple-700 mb-3">System Recommendations</h3>
+                  <h3 className="font-bold text-purple-700 mb-3">
+                    System Recommendations
+                  </h3>
                   <p className="mb-3">
-                    Based on {student.name.split(" ")[0]}'s learning patterns and performance data, we recommend the
-                    following:
+                    Based on {student.name.split(" ")[0]}'s learning patterns
+                    and performance data, we recommend the following:
                   </p>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2">
@@ -451,8 +489,13 @@ export default function StudentReport() {
                         1
                       </div>
                       <span>
-                        Switch all courses to {student.modePerformance.sort((a, b) => b.score - a.score)[0].mode} mode
-                        for optimal learning outcomes.
+                        Switch all courses to{" "}
+                        {
+                          student.modePerformance.sort(
+                            (a, b) => b.value - a.value
+                          )[0].name
+                        }{" "}
+                        mode for optimal learning outcomes.
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -460,7 +503,12 @@ export default function StudentReport() {
                         2
                       </div>
                       <span>
-                        Focus additional support on {student.courses.sort((a, b) => a.progress - b.progress)[0].name}{" "}
+                        Focus additional support on{" "}
+                        {
+                          student.courses.sort(
+                            (a, b) => a.progress - b.progress
+                          )[0].name
+                        }{" "}
                         where progress is lowest.
                       </span>
                     </li>
@@ -470,7 +518,11 @@ export default function StudentReport() {
                       </div>
                       <span>
                         Schedule learning sessions on{" "}
-                        {student.weeklyActivity.reduce((max, item) => (item.minutes > max.minutes ? item : max)).day}{" "}
+                        {
+                          student.weeklyActivity.reduce((max, item) =>
+                            item.value > max.value ? item : max
+                          ).name
+                        }{" "}
                         when engagement is highest.
                       </span>
                     </li>
@@ -482,6 +534,5 @@ export default function StudentReport() {
         </Tabs>
       </main>
     </div>
-  )
+  );
 }
-
