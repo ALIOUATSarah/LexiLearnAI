@@ -92,7 +92,7 @@ export default function Lessons() {
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="bg-primary rounded-md w-8 h-8 flex items-center justify-center">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
               <span className="text-white font-bold">L</span>
             </div>
             <h1 className="text-xl font-bold">LexiLearn AI</h1>
@@ -189,16 +189,25 @@ export default function Lessons() {
                   />
                 </CardContent>
                 <CardFooter className="bg-gray-50 px-4 py-3 border-t">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`ml-auto hover:${course.color.replace(
-                      "bg-",
-                      "bg-"
-                    )} hover:text-white`}
-                  >
-                    Continue Learning
-                  </Button>
+                <Button
+  size="lg"
+  className={`
+    ml-auto 
+    ${course.color} 
+    text-white 
+    px-5 
+    py-2 
+    rounded-md 
+    transition 
+    duration-200 
+    hover:bg-opacity-80
+  `}
+>
+  Continue Learning
+</Button>
+
+
+
                 </CardFooter>
               </Card>
             </Link>

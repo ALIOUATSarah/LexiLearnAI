@@ -40,14 +40,14 @@ export default function CoursePage() {
             {
               id: 1,
               title: "Lecture Slides - Introduction to Physics",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 2,
               title: "Physics Fundamentals - Reading Material",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: true,
             },
@@ -74,14 +74,14 @@ export default function CoursePage() {
             {
               id: 4,
               title: "Newton's Laws - Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 5,
               title: "Newton's Laws - Worksheet",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -101,14 +101,14 @@ export default function CoursePage() {
             {
               id: 6,
               title: "Energy and Work - Lecture Notes",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 7,
               title: "Energy Calculations - Practice Problems",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
@@ -135,14 +135,14 @@ export default function CoursePage() {
             {
               id: 8,
               title: "Functions and Limits - Lecture Slides",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 9,
               title: "Limits Workbook",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: true,
             },
@@ -169,21 +169,21 @@ export default function CoursePage() {
             {
               id: 11,
               title: "Derivatives - Comprehensive Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 12,
               title: "Differentiation Techniques - Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 13,
               title: "Derivative Applications - Practice Problems",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -203,7 +203,7 @@ export default function CoursePage() {
             {
               id: 14,
               title: "Integration Fundamentals - Lecture Notes",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
@@ -217,7 +217,7 @@ export default function CoursePage() {
             {
               id: 16,
               title: "Applications of Integration - Worksheet",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -237,21 +237,21 @@ export default function CoursePage() {
             {
               id: 17,
               title: "Differential Equations - Introduction",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 18,
               title: "Solving First-Order Equations - Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 19,
               title: "Differential Equations in Science - Case Studies",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -278,14 +278,14 @@ export default function CoursePage() {
             {
               id: 20,
               title: "Cell Biology - Comprehensive Slides",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 21,
               title: "Cell Structure Diagrams",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: true,
             },
@@ -312,21 +312,21 @@ export default function CoursePage() {
             {
               id: 23,
               title: "Genetics Fundamentals - Lecture Notes",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 24,
               title: "Inheritance Patterns - Interactive Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 25,
               title: "Genetic Disorders - Case Studies",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -346,20 +346,20 @@ export default function CoursePage() {
             {
               id: 26,
               title: "Evolution - Comprehensive Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 27,
               title: "Biodiversity Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 28,
-              title: "Evolution Evidence - Video Documentary",
+              title: "Evolution Evidence - Video worksheetumentary",
               type: "video",
               url: "#",
               completed: false,
@@ -387,21 +387,21 @@ export default function CoursePage() {
             {
               id: 29,
               title: "Atomic Structure - Lecture Slides",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 30,
               title: "Periodic Table Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 31,
               title: "Electron Configuration Practice",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -421,7 +421,7 @@ export default function CoursePage() {
             {
               id: 32,
               title: "Chemical Bonding - Comprehensive Notes",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
@@ -435,7 +435,7 @@ export default function CoursePage() {
             {
               id: 34,
               title: "Bonding Worksheet",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -455,14 +455,14 @@ export default function CoursePage() {
             {
               id: 35,
               title: "Chemical Reactions - Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 36,
               title: "Stoichiometry Problem Set",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
@@ -496,20 +496,20 @@ export default function CoursePage() {
             {
               id: 38,
               title: "Ancient Civilizations - Overview Slides",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 39,
               title: "Ancient Artifacts and Monuments",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: true,
             },
             {
               id: 40,
-              title: "Daily Life in Ancient Civilizations - Documentary",
+              title: "Daily Life in Ancient Civilizations - worksheetumentary",
               type: "video",
               url: "#",
               completed: false,
@@ -530,21 +530,21 @@ export default function CoursePage() {
             {
               id: 41,
               title: "Medieval Europe - Comprehensive Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 42,
               title: "Renaissance Art and Culture - Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 43,
               title: "Medieval and Renaissance Timeline",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -564,20 +564,20 @@ export default function CoursePage() {
             {
               id: 44,
               title: "Modern History - Key Events",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 45,
               title: "Globalization - Impact and Challenges",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 46,
-              title: "20th Century Documentary Series",
+              title: "20th Century worksheetumentary Series",
               type: "video",
               url: "#",
               completed: false,
@@ -606,21 +606,21 @@ export default function CoursePage() {
             {
               id: 47,
               title: "Literary Analysis - Fundamentals",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: true,
             },
             {
               id: 48,
               title: "Critical Reading Strategies",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 49,
               title: "Literary Elements - Interactive Guide",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -640,14 +640,14 @@ export default function CoursePage() {
             {
               id: 50,
               title: "Poetry Analysis - Comprehensive Guide",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 51,
               title: "Poetic Forms and Traditions",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
@@ -674,21 +674,21 @@ export default function CoursePage() {
             {
               id: 53,
               title: "Fiction Analysis - Key Concepts",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
             {
               id: 54,
               title: "Short Story Collection - Annotated",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 55,
               title: "Novel Analysis Worksheet",
-              type: "doc",
+              type: "worksheet",
               url: "#",
               completed: false,
             },
@@ -708,14 +708,14 @@ export default function CoursePage() {
             {
               id: 56,
               title: "Drama - Historical Development",
-              type: "pdf",
+              type: "reading",
               url: "#",
               completed: false,
             },
             {
               id: 57,
               title: "Dramatic Analysis - Presentation",
-              type: "ppt",
+              type: "slides",
               url: "#",
               completed: false,
             },
@@ -788,25 +788,27 @@ export default function CoursePage() {
 
   const getFileIcon = (type) => {
     switch (type) {
-      case "pdf":
-        return <FileText className="text-red-500" size={20} />
-      case "ppt":
+      case "slides":
         return <FileText className="text-orange-500" size={20} />
-      case "doc":
-        return <FileText className="text-blue-500" size={20} />
+      case "reading":
+        return <FileText className="text-red-500" size={20} />
       case "video":
         return <FileText className="text-purple-500" size={20} />
+      case "worksheet":
+        return <FileText className="text-blue-500" size={20} />
       default:
         return <FileText className="text-gray-500" size={20} />
     }
   }
+
+
 
   return (
     <div className={`min-h-screen ${getModeClasses()}`}>
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
               <span className="text-white font-bold">L</span>
             </div>
             <h1 className="text-xl font-bold">LexiLearn AI</h1>
@@ -828,11 +830,13 @@ export default function CoursePage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 text-[1.075rem] font-medium leading-relaxed text-gray-800">
+
+
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className={`font-bold mb-2 ${mode === "dyslexia" ? "text-3xl" : "text-3xl"}`}>{course.title}</h1>
+              <h1 className={`font-bold mb-2 text-blue-600 ${mode === "dyslexia" ? "text-3xl" : "text-3xl"}`}>{course.title}</h1>
               <p className="text-gray-600">{course.code}</p>
             </div>
 
@@ -853,35 +857,48 @@ export default function CoursePage() {
           </p>
         </div>
 
-        <div className="flex mb-6 border-b">
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === "content" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
-            onClick={() => setActiveTab("content")}
-          >
-            <div className="flex items-center gap-2">
-              <BookOpen size={18} />
-              <span>Course Content</span>
-            </div>
-          </button>
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === "materials" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
-            onClick={() => setActiveTab("materials")}
-          >
-            <div className="flex items-center gap-2">
-              <FileDown size={18} />
-              <span>Course Materials</span>
-            </div>
-          </button>
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === "notes" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
-            onClick={() => setActiveTab("notes")}
-          >
-            <div className="flex items-center gap-2">
-              <FileText size={18} />
-              <span>Generate Notes</span>
-            </div>
-          </button>
-        </div>
+        <div className="flex mb-6 border-b text-lg font-semibold space-x-8">
+  <button
+    className={`px-6 py-3 rounded-md transition-all duration-200 ${
+      activeTab === "content"
+        ? "text-blue-600 border-b-4 border-blue-600"
+        : "text-gray-700 hover:text-blue-500"
+    }`}
+    onClick={() => setActiveTab("content")}
+  >
+    <div className="flex items-center gap-2">
+      <BookOpen size={22} />
+      <span>Course Content</span>
+    </div>
+  </button>
+  <button
+    className={`px-6 py-3 rounded-md transition-all duration-200 ${
+      activeTab === "materials"
+        ? "text-blue-600 border-b-4 border-blue-600"
+        : "text-gray-700 hover:text-blue-500"
+    }`}
+    onClick={() => setActiveTab("materials")}
+  >
+    <div className="flex items-center gap-2">
+      <FileDown size={22} />
+      <span>Course Materials</span>
+    </div>
+  </button>
+  <button
+    className={`px-6 py-3 rounded-md transition-all duration-200 ${
+      activeTab === "notes"
+        ? "text-blue-600 border-b-4 border-blue-600"
+        : "text-gray-700 hover:text-blue-500"
+    }`}
+    onClick={() => setActiveTab("notes")}
+  >
+    <div className="flex items-center gap-2">
+      <FileText size={22} />
+      <span>Generate Notes</span>
+    </div>
+  </button>
+</div>
+
 
         {activeTab === "content" && (
           <div className="space-y-8">
@@ -889,9 +906,9 @@ export default function CoursePage() {
             {mode === "normal" && (
               <div className="space-y-8">
                 {course.lessons.map((lesson) => (
-                  <Card key={lesson.id} className="overflow-hidden">
+                  <Card key={lesson.id} className="overflow-hidden border-l-4 border-green-400 shadow-sm rounded-md bg-white hover:shadow-md transition">
                     <CardContent className="p-6">
-                      <h2 className="text-xl font-bold mb-4">
+                      <h2 className="text-xl font-bold mb-4 text-green-600 bg-green-50 px-3 py-2 rounded-md shadow-sm">
                         Lesson {lesson.id}: {lesson.title}
                       </h2>
                       <p className="text-gray-700 mb-4">{lesson.content}</p>
@@ -906,10 +923,13 @@ export default function CoursePage() {
                   </Card>
                 ))}
 
-                <div className="flex justify-end mt-8">
-                  <Button asChild>
+<div className="flex justify-center mt-8">
+<Button
+    className="bg-[#6C48C5] hover:bg-[#5a39b0] text-white text-lg px-8 py-3 rounded-lg shadow-lg"
+    asChild
+  >
                     <Link href={`/quiz/${courseId}`}>Take Quiz</Link>
-                  </Button>
+                    </Button>
                 </div>
               </div>
             )}
@@ -1058,19 +1078,30 @@ export default function CoursePage() {
                           {getFileIcon(material.type)}
                           <span className="font-medium">{material.title}</span>
                           <Badge
-                            variant="outline"
-                            className={`${
-                              material.type === "pdf"
-                                ? "bg-red-50 text-red-700 border-red-200"
-                                : material.type === "ppt"
-                                  ? "bg-orange-50 text-orange-700 border-orange-200"
-                                  : material.type === "doc"
-                                    ? "bg-blue-50 text-blue-700 border-blue-200"
-                                    : "bg-purple-50 text-purple-700 border-purple-200"
-                            }`}
-                          >
-                            {material.type.toUpperCase()}
-                          </Badge>
+  variant="outline"
+  className={`${
+    material.type === "slides"
+      ? "bg-orange-50 text-orange-700 border-orange-200"
+      : material.type === "reading"
+      ? "bg-red-50 text-red-700 border-red-200"
+      : material.type === "worksheet"
+      ? "bg-blue-50 text-blue-700 border-blue-200"
+      : material.type === "video"
+      ? "bg-purple-50 text-purple-700 border-purple-200"
+      : "bg-gray-50 text-gray-700 border-gray-200"
+  }`}
+>
+  {material.type === "slides"
+    ? "Slides"
+    : material.type === "reading"
+    ? "Reading"
+    : material.type === "worksheet"
+    ? "Worksheet"
+    : material.type === "video"
+    ? "Video"
+    : "Material"}
+</Badge>
+
                           {material.completed && (
                             <Badge className="bg-green-100 text-green-700 border-green-200">
                               <CheckCircle size={12} className="mr-1" /> Completed
@@ -1146,7 +1177,7 @@ export default function CoursePage() {
                     <h3 className="font-medium text-blue-700">Generated Study Notes - {course.title}</h3>
                     <Button variant="outline" size="sm" className="flex items-center gap-1">
                       <Download size={16} />
-                      <span>Download PDF</span>
+                      <span>Download reading</span>
                     </Button>
                   </div>
                   <div className="p-6 space-y-6">
@@ -1199,4 +1230,3 @@ export default function CoursePage() {
     </div>
   )
 }
-
