@@ -1,37 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function Login() {
-  const router = useRouter()
-  const [userType, setUserType] = useState("student")
-  const [userId, setUserId] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const router = useRouter();
+  const [userType, setUserType] = useState("student");
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!userId || !password) {
-      setError("Please enter both ID and password")
-      return
+      setError("Please enter both ID and password");
+      return;
     }
 
     // Simulate login based on user type
     if (userType === "student") {
-      router.push("/lessons")
+      router.push("/student-dashboard");
     } else if (userType === "parent") {
-      router.push("/parent-dashboard")
+      router.push("/parent-dashboard");
     } else if (userType === "teacher") {
-      router.push("/teacher-dashboard")
+      router.push("/teacher-dashboard");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
@@ -46,7 +53,9 @@ export default function Login() {
           <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
             Sign in
           </CardTitle>
-          <CardDescription>Enter your ID and password to access your account</CardDescription>
+          <CardDescription>
+            Enter your ID and password to access your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -58,19 +67,31 @@ export default function Login() {
                 className="flex space-x-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="student" id="student" className="text-blue-600" />
+                  <RadioGroupItem
+                    value="student"
+                    id="student"
+                    className="text-blue-600"
+                  />
                   <Label htmlFor="student" className="cursor-pointer">
                     Student
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="parent" id="parent" className="text-purple-600" />
+                  <RadioGroupItem
+                    value="parent"
+                    id="parent"
+                    className="text-purple-600"
+                  />
                   <Label htmlFor="parent" className="cursor-pointer">
                     Parent
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="teacher" id="teacher" className="text-green-600" />
+                  <RadioGroupItem
+                    value="teacher"
+                    id="teacher"
+                    className="text-green-600"
+                  />
                   <Label htmlFor="teacher" className="cursor-pointer">
                     Teacher
                   </Label>
@@ -80,7 +101,11 @@ export default function Login() {
 
             <div className="space-y-2">
               <Label htmlFor="userId" className="text-gray-700">
-                {userType === "student" ? "Student ID" : userType === "parent" ? "Parent ID" : "Teacher ID"}
+                {userType === "student"
+                  ? "Student ID"
+                  : userType === "parent"
+                  ? "Parent ID"
+                  : "Teacher ID"}
               </Label>
               <Input
                 id="userId"
@@ -116,10 +141,11 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center bg-gradient-to-r from-blue-50 to-purple-50">
-          <p className="text-sm text-gray-500">Demo credentials: Use any ID/password combination</p>
+          <p className="text-sm text-gray-500">
+            Demo credentials: Use any ID/password combination
+          </p>
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
-

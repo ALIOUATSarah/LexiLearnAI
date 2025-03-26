@@ -33,6 +33,11 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+    
+    /* Custom colors for LexiLearn */
+    --cream: 39 100% 97%;
+    --dark: 220 20% 20%;
+    --light-blue: 210 100% 97%;
   }
 
   .dark {
@@ -73,4 +78,36 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom styles for LexiLearn */
+.font-dyslexic {
+  font-family: "OpenDyslexic", sans-serif;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+.bg-cream {
+  background-color: hsl(var(--cream));
+}
+
+.text-dark {
+  color: hsl(var(--dark));
+}
+
+.bg-light-blue {
+  background-color: hsl(var(--light-blue));
+}
+
+/* For memory game */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }

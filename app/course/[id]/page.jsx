@@ -1,23 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Volume2, FileText, Download, FileDown, BookOpen, CheckCircle } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Volume2,
+  FileText,
+  Download,
+  FileDown,
+  BookOpen,
+  CheckCircle,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function CoursePage() {
-  const params = useParams()
-  const router = useRouter()
-  const courseId = params.id
-  const [mode, setMode] = useState("normal")
-  const [expandedSection, setExpandedSection] = useState(null)
-  const [activeTab, setActiveTab] = useState("content")
-  const [generatingNotes, setGeneratingNotes] = useState(false)
-  const [notesGenerated, setNotesGenerated] = useState(false)
+  const params = useParams();
+  const router = useRouter();
+  const courseId = params.id;
+  const [mode, setMode] = useState("normal");
+  const [expandedSection, setExpandedSection] = useState(null);
+  const [activeTab, setActiveTab] = useState("content");
+  const [generatingNotes, setGeneratingNotes] = useState(false);
+  const [notesGenerated, setNotesGenerated] = useState(false);
 
   // Course data (would come from API in a real app)
   const courseData = {
@@ -119,7 +126,8 @@ export default function CoursePage() {
     math201: {
       title: "Mathematics",
       code: "MAT201",
-      description: "Advanced algebra and calculus fundamentals for science and engineering applications.",
+      description:
+        "Advanced algebra and calculus fundamentals for science and engineering applications.",
       lessons: [
         {
           id: 1,
@@ -262,7 +270,8 @@ export default function CoursePage() {
     bio150: {
       title: "Biology",
       code: "BIO150",
-      description: "Study of living organisms and biological systems, from cellular structures to ecosystems.",
+      description:
+        "Study of living organisms and biological systems, from cellular structures to ecosystems.",
       lessons: [
         {
           id: 1,
@@ -371,7 +380,8 @@ export default function CoursePage() {
     chem110: {
       title: "Chemistry",
       code: "CHEM110",
-      description: "Introduction to chemical principles, reactions, and the molecular basis of matter.",
+      description:
+        "Introduction to chemical principles, reactions, and the molecular basis of matter.",
       lessons: [
         {
           id: 1,
@@ -480,7 +490,8 @@ export default function CoursePage() {
     hist101: {
       title: "History",
       code: "HIST101",
-      description: "World history from ancient civilizations to modern times, exploring key events and developments.",
+      description:
+        "World history from ancient civilizations to modern times, exploring key events and developments.",
       lessons: [
         {
           id: 1,
@@ -731,9 +742,9 @@ export default function CoursePage() {
       ],
     },
     // Add other courses as needed
-  }
+  };
 
-  const course = courseData[courseId]
+  const course = courseData[courseId];
 
   if (!course) {
     return (
@@ -745,61 +756,61 @@ export default function CoursePage() {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   // Text-to-speech function
   const speakText = (text) => {
     if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.rate = 0.9 // Slightly slower for better comprehension
-      window.speechSynthesis.speak(utterance)
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9; // Slightly slower for better comprehension
+      window.speechSynthesis.speak(utterance);
     }
-  }
+  };
 
   // Apply mode-specific classes
   const getModeClasses = () => {
     switch (mode) {
       case "dyslexia":
-        return "font-dyslexic bg-amber-50 text-dark"
+        return "font-dyslexic bg-amber-50 text-dark";
       case "adhd":
-        return "bg-blue-50"
+        return "bg-blue-50";
       default:
-        return "bg-white"
+        return "bg-white";
     }
-  }
+  };
 
   const toggleSection = (sectionId) => {
     if (expandedSection === sectionId) {
-      setExpandedSection(null)
+      setExpandedSection(null);
     } else {
-      setExpandedSection(sectionId)
+      setExpandedSection(sectionId);
     }
-  }
+  };
 
   const generateNotes = () => {
-    setGeneratingNotes(true)
+    setGeneratingNotes(true);
     // Simulate API call to generate notes
     setTimeout(() => {
-      setGeneratingNotes(false)
-      setNotesGenerated(true)
-    }, 2000)
-  }
+      setGeneratingNotes(false);
+      setNotesGenerated(true);
+    }, 2000);
+  };
 
   const getFileIcon = (type) => {
     switch (type) {
       case "pdf":
-        return <FileText className="text-red-500" size={20} />
+        return <FileText className="text-red-500" size={20} />;
       case "ppt":
-        return <FileText className="text-orange-500" size={20} />
+        return <FileText className="text-orange-500" size={20} />;
       case "doc":
-        return <FileText className="text-blue-500" size={20} />
+        return <FileText className="text-blue-500" size={20} />;
       case "video":
-        return <FileText className="text-purple-500" size={20} />
+        return <FileText className="text-purple-500" size={20} />;
       default:
-        return <FileText className="text-gray-500" size={20} />
+        return <FileText className="text-gray-500" size={20} />;
     }
-  }
+  };
 
   return (
     <div className={`min-h-screen ${getModeClasses()}`}>
@@ -821,9 +832,23 @@ export default function CoursePage() {
               </TabsList>
             </Tabs>
 
-            <Button variant="outline" asChild>
-              <Link href="/lessons">Back to Courses</Link>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                className="border-blue-300 text-blue-600"
+                asChild
+              >
+                <Link href="/lessons">All Courses</Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="border-purple-300 text-purple-600"
+                asChild
+              >
+                <Link href="/student-dashboard">My Dashboard</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -832,7 +857,13 @@ export default function CoursePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className={`font-bold mb-2 ${mode === "dyslexia" ? "text-3xl" : "text-3xl"}`}>{course.title}</h1>
+              <h1
+                className={`font-bold mb-2 ${
+                  mode === "dyslexia" ? "text-3xl" : "text-3xl"
+                }`}
+              >
+                {course.title}
+              </h1>
               <p className="text-gray-600">{course.code}</p>
             </div>
 
@@ -848,14 +879,22 @@ export default function CoursePage() {
               </Button>
             )}
           </div>
-          <p className={`text-gray-700 mt-4 ${mode === "dyslexia" ? "text-lg leading-relaxed" : ""}`}>
+          <p
+            className={`text-gray-700 mt-4 ${
+              mode === "dyslexia" ? "text-lg leading-relaxed" : ""
+            }`}
+          >
             {course.description}
           </p>
         </div>
 
         <div className="flex mb-6 border-b">
           <button
-            className={`px-4 py-2 font-medium ${activeTab === "content" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
+            className={`px-4 py-2 font-medium ${
+              activeTab === "content"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("content")}
           >
             <div className="flex items-center gap-2">
@@ -864,7 +903,11 @@ export default function CoursePage() {
             </div>
           </button>
           <button
-            className={`px-4 py-2 font-medium ${activeTab === "materials" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
+            className={`px-4 py-2 font-medium ${
+              activeTab === "materials"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("materials")}
           >
             <div className="flex items-center gap-2">
@@ -873,7 +916,11 @@ export default function CoursePage() {
             </div>
           </button>
           <button
-            className={`px-4 py-2 font-medium ${activeTab === "notes" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
+            className={`px-4 py-2 font-medium ${
+              activeTab === "notes"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("notes")}
           >
             <div className="flex items-center gap-2">
@@ -918,7 +965,10 @@ export default function CoursePage() {
             {mode === "dyslexia" && (
               <div className="space-y-8">
                 {course.lessons.map((lesson) => (
-                  <Card key={lesson.id} className="overflow-hidden bg-amber-50 border-2 border-amber-300">
+                  <Card
+                    key={lesson.id}
+                    className="overflow-hidden bg-amber-50 border-2 border-amber-300"
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-4 bg-white p-3 rounded-md shadow-sm">
                         <h2 className="text-2xl font-bold text-purple-800">
@@ -934,10 +984,15 @@ export default function CoursePage() {
                           <span>Listen</span>
                         </Button>
                       </div>
-                      <p className="text-xl leading-relaxed mb-6 bg-white p-4 rounded-md">{lesson.content}</p>
+                      <p className="text-xl leading-relaxed mb-6 bg-white p-4 rounded-md">
+                        {lesson.content}
+                      </p>
                       <ul className="space-y-4 bg-white p-4 rounded-md">
                         {lesson.sections.map((section, index) => (
-                          <li key={index} className="text-lg leading-relaxed flex gap-2 p-2 border-b border-amber-200">
+                          <li
+                            key={index}
+                            className="text-lg leading-relaxed flex gap-2 p-2 border-b border-amber-200"
+                          >
                             <span className="text-purple-700 font-bold">•</span>
                             <span>{section}</span>
                           </li>
@@ -948,7 +1003,11 @@ export default function CoursePage() {
                 ))}
 
                 <div className="flex justify-end mt-8">
-                  <Button size="lg" className="bg-purple-600 hover:bg-purple-700" asChild>
+                  <Button
+                    size="lg"
+                    className="bg-purple-600 hover:bg-purple-700"
+                    asChild
+                  >
                     <Link href={`/quiz/${courseId}`}>Take Quiz</Link>
                   </Button>
                 </div>
@@ -959,7 +1018,10 @@ export default function CoursePage() {
             {mode === "adhd" && (
               <div className="space-y-8">
                 {course.lessons.map((lesson) => (
-                  <Card key={lesson.id} className="overflow-hidden border-2 border-blue-400 bg-white">
+                  <Card
+                    key={lesson.id}
+                    className="overflow-hidden border-2 border-blue-400 bg-white"
+                  >
                     <CardContent className="p-6">
                       <h2 className="text-xl font-bold mb-4 text-blue-600 bg-blue-50 p-2 rounded-md border border-blue-200">
                         Lesson {lesson.id}: {lesson.title}
@@ -978,8 +1040,8 @@ export default function CoursePage() {
                                 ? index === 0
                                   ? "bg-green-50 border-green-400"
                                   : index === 1
-                                    ? "bg-purple-50 border-purple-400"
-                                    : "bg-orange-50 border-orange-400"
+                                  ? "bg-purple-50 border-purple-400"
+                                  : "bg-orange-50 border-orange-400"
                                 : "bg-gray-50"
                             }`}
                             onClick={() => toggleSection(index)}
@@ -988,7 +1050,11 @@ export default function CoursePage() {
                               <div className="flex items-center justify-between mb-2">
                                 <h3
                                   className={`font-bold ${
-                                    index === 0 ? "text-green-600" : index === 1 ? "text-purple-600" : "text-orange-600"
+                                    index === 0
+                                      ? "text-green-600"
+                                      : index === 1
+                                      ? "text-purple-600"
+                                      : "text-orange-600"
                                   }`}
                                 >
                                   Part {index + 1}
@@ -999,18 +1065,22 @@ export default function CoursePage() {
                                       ? index === 0
                                         ? "bg-green-100 text-green-600"
                                         : index === 1
-                                          ? "bg-purple-100 text-purple-600"
-                                          : "bg-orange-100 text-orange-600"
+                                        ? "bg-purple-100 text-purple-600"
+                                        : "bg-orange-100 text-orange-600"
                                       : "bg-gray-200"
                                   }`}
                                 >
-                                  {expandedSection === index ? "Expanded" : "Click to expand"}
+                                  {expandedSection === index
+                                    ? "Expanded"
+                                    : "Click to expand"}
                                 </span>
                               </div>
 
                               <div
                                 className={`overflow-hidden transition-all duration-300 ${
-                                  expandedSection === index ? "max-h-96" : "max-h-12"
+                                  expandedSection === index
+                                    ? "max-h-96"
+                                    : "max-h-12"
                                 }`}
                               >
                                 <p>{section}</p>
@@ -1029,7 +1099,9 @@ export default function CoursePage() {
                     className="animate-pulse bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
                     asChild
                   >
-                    <Link href={`/quiz/${courseId}`}>Take Interactive Quiz! 🎮</Link>
+                    <Link href={`/quiz/${courseId}`}>
+                      Take Interactive Quiz! 🎮
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -1040,8 +1112,12 @@ export default function CoursePage() {
         {activeTab === "materials" && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm border p-4">
-              <h2 className="text-xl font-bold mb-4 text-blue-700">Course Materials</h2>
-              <p className="text-gray-600 mb-4">Download lecture slides, readings, and other course materials.</p>
+              <h2 className="text-xl font-bold mb-4 text-blue-700">
+                Course Materials
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Download lecture slides, readings, and other course materials.
+              </p>
 
               {course.lessons.map((lesson) => (
                 <div key={lesson.id} className="mb-6">
@@ -1063,21 +1139,26 @@ export default function CoursePage() {
                               material.type === "pdf"
                                 ? "bg-red-50 text-red-700 border-red-200"
                                 : material.type === "ppt"
-                                  ? "bg-orange-50 text-orange-700 border-orange-200"
-                                  : material.type === "doc"
-                                    ? "bg-blue-50 text-blue-700 border-blue-200"
-                                    : "bg-purple-50 text-purple-700 border-purple-200"
+                                ? "bg-orange-50 text-orange-700 border-orange-200"
+                                : material.type === "doc"
+                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                : "bg-purple-50 text-purple-700 border-purple-200"
                             }`}
                           >
                             {material.type.toUpperCase()}
                           </Badge>
                           {material.completed && (
                             <Badge className="bg-green-100 text-green-700 border-green-200">
-                              <CheckCircle size={12} className="mr-1" /> Completed
+                              <CheckCircle size={12} className="mr-1" />{" "}
+                              Completed
                             </Badge>
                           )}
                         </div>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-1"
+                        >
                           <Download size={16} />
                           <span>Download</span>
                         </Button>
@@ -1093,18 +1174,24 @@ export default function CoursePage() {
         {activeTab === "notes" && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-xl font-bold mb-4 text-blue-700">Generate Study Notes</h2>
+              <h2 className="text-xl font-bold mb-4 text-blue-700">
+                Generate Study Notes
+              </h2>
               <p className="text-gray-600 mb-6">
-                Our AI can generate comprehensive study notes based on the course content. These notes are personalized
-                to your learning style and preferences.
+                Our AI can generate comprehensive study notes based on the
+                course content. These notes are personalized to your learning
+                style and preferences.
               </p>
 
               {!notesGenerated ? (
                 <div className="text-center p-8 border rounded-lg bg-blue-50">
-                  <h3 className="text-lg font-medium mb-4">Ready to generate your study notes?</h3>
+                  <h3 className="text-lg font-medium mb-4">
+                    Ready to generate your study notes?
+                  </h3>
                   <p className="text-gray-600 mb-6">
-                    The AI will analyze the course content and create personalized notes that highlight key concepts,
-                    definitions, and examples to help you study more effectively.
+                    The AI will analyze the course content and create
+                    personalized notes that highlight key concepts, definitions,
+                    and examples to help you study more effectively.
                   </p>
                   <Button
                     onClick={generateNotes}
@@ -1143,8 +1230,14 @@ export default function CoursePage() {
               ) : (
                 <div className="border rounded-lg">
                   <div className="bg-blue-50 p-4 border-b flex justify-between items-center">
-                    <h3 className="font-medium text-blue-700">Generated Study Notes - {course.title}</h3>
-                    <Button variant="outline" size="sm" className="flex items-center gap-1">
+                    <h3 className="font-medium text-blue-700">
+                      Generated Study Notes - {course.title}
+                    </h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-1"
+                    >
                       <Download size={16} />
                       <span>Download PDF</span>
                     </Button>
@@ -1156,7 +1249,9 @@ export default function CoursePage() {
                           {lesson.id}. {lesson.title}
                         </h3>
                         <div className="pl-4 border-l-2 border-blue-200">
-                          <h4 className="font-medium text-blue-600 mb-2">Key Concepts:</h4>
+                          <h4 className="font-medium text-blue-600 mb-2">
+                            Key Concepts:
+                          </h4>
                           <ul className="list-disc pl-5 space-y-1 mb-4">
                             {lesson.sections.map((section, index) => (
                               <li key={index} className="text-gray-700">
@@ -1165,28 +1260,49 @@ export default function CoursePage() {
                             ))}
                           </ul>
 
-                          <h4 className="font-medium text-blue-600 mb-2">Summary:</h4>
+                          <h4 className="font-medium text-blue-600 mb-2">
+                            Summary:
+                          </h4>
                           <p className="text-gray-700 mb-4">{lesson.content}</p>
 
-                          <h4 className="font-medium text-blue-600 mb-2">Study Tips:</h4>
+                          <h4 className="font-medium text-blue-600 mb-2">
+                            Study Tips:
+                          </h4>
                           <ul className="list-disc pl-5 space-y-1">
-                            <li className="text-gray-700">Review the key concepts regularly</li>
-                            <li className="text-gray-700">Practice with examples from the course materials</li>
-                            <li className="text-gray-700">Connect these concepts with real-world applications</li>
+                            <li className="text-gray-700">
+                              Review the key concepts regularly
+                            </li>
+                            <li className="text-gray-700">
+                              Practice with examples from the course materials
+                            </li>
+                            <li className="text-gray-700">
+                              Connect these concepts with real-world
+                              applications
+                            </li>
                           </ul>
                         </div>
                       </div>
                     ))}
 
                     <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200 mt-6">
-                      <h4 className="font-medium text-amber-700 mb-2">Study Recommendations:</h4>
+                      <h4 className="font-medium text-amber-700 mb-2">
+                        Study Recommendations:
+                      </h4>
                       <ul className="list-disc pl-5 space-y-1">
                         <li className="text-gray-700">
-                          Focus on understanding the fundamental principles rather than memorizing facts
+                          Focus on understanding the fundamental principles
+                          rather than memorizing facts
                         </li>
-                        <li className="text-gray-700">Create flashcards for key terms and concepts</li>
-                        <li className="text-gray-700">Explain concepts to others to reinforce your understanding</li>
-                        <li className="text-gray-700">Complete all practice problems in the course materials</li>
+                        <li className="text-gray-700">
+                          Create flashcards for key terms and concepts
+                        </li>
+                        <li className="text-gray-700">
+                          Explain concepts to others to reinforce your
+                          understanding
+                        </li>
+                        <li className="text-gray-700">
+                          Complete all practice problems in the course materials
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -1197,6 +1313,5 @@ export default function CoursePage() {
         )}
       </main>
     </div>
-  )
+  );
 }
-

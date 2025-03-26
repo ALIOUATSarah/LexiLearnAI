@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 export function GameDragDrop() {
-  const { toast } = useToast()
-  const [draggedItem, setDraggedItem] = useState(null)
-  const [items, setItems] = useState([])
-  const [categories, setCategories] = useState([])
-  const [score, setScore] = useState(0)
-  const [gameComplete, setGameComplete] = useState(false)
+  const { toast } = useToast();
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [score, setScore] = useState(0);
+  const [gameComplete, setGameComplete] = useState(false);
 
   // Initialize the game
   useEffect(() => {
-    initializeGame()
-  }, [])
+    initializeGame();
+  }, []);
 
   const initializeGame = () => {
     // Define categories
@@ -24,102 +24,151 @@ export function GameDragDrop() {
       { id: "forces", name: "Forces", items: [] },
       { id: "energy", name: "Energy Types", items: [] },
       { id: "motion", name: "Motion Concepts", items: [] },
-    ]
+    ];
 
     // Define items
     const gameItems = [
       { id: "gravity", text: "Gravity", category: "forces", placed: false },
       { id: "friction", text: "Friction", category: "forces", placed: false },
       { id: "magnetism", text: "Magnetism", category: "forces", placed: false },
-      { id: "kinetic", text: "Kinetic Energy", category: "energy", placed: false },
-      { id: "potential", text: "Potential Energy", category: "energy", placed: false },
-      { id: "thermal", text: "Thermal Energy", category: "energy", placed: false },
+      {
+        id: "kinetic",
+        text: "Kinetic Energy",
+        category: "energy",
+        placed: false,
+      },
+      {
+        id: "potential",
+        text: "Potential Energy",
+        category: "energy",
+        placed: false,
+      },
+      {
+        id: "thermal",
+        text: "Thermal Energy",
+        category: "energy",
+        placed: false,
+      },
       { id: "velocity", text: "Velocity", category: "motion", placed: false },
-      { id: "acceleration", text: "Acceleration", category: "motion", placed: false },
-      { id: "momentum", text: '  text: "Acceleration', category: "motion", placed: false },
+      {
+        id: "acceleration",
+        text: "Acceleration",
+        category: "motion",
+        placed: false,
+      },
       { id: "momentum", text: "Momentum", category: "motion", placed: false },
-    ]
+    ];
 
     // Shuffle the items
-    const shuffledItems = [...gameItems].sort(() => Math.random() - 0.5)
+    const shuffledItems = [...gameItems].sort(() => Math.random() - 0.5);
 
-    setCategories(gameCategories)
-    setItems(shuffledItems)
-    setScore(0)
-    setGameComplete(false)
-  }
+    setCategories(gameCategories);
+    setItems(shuffledItems);
+    setScore(0);
+    setGameComplete(false);
+  };
 
   const handleDragStart = (item) => {
-    setDraggedItem(item)
-  }
+    setDraggedItem(item);
+  };
 
   const handleDragOver = (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   const handleDrop = (categoryId) => {
-    if (!draggedItem) return
+    if (!draggedItem) return;
 
     // Check if the item is dropped in the correct category
-    const isCorrect = draggedItem.category === categoryId
+    const isCorrect = draggedItem.category === categoryId;
 
     // Update the items list
-    const updatedItems = items.map((item) => (item.id === draggedItem.id ? { ...item, placed: true } : item))
+    const updatedItems = items.map((item) =>
+      item.id === draggedItem.id ? { ...item, placed: true } : item
+    );
 
     // Update the categories
-    const updatedCategories = [...categories]
-    const categoryIndex = updatedCategories.findIndex((c) => c.id === categoryId)
+    const updatedCategories = [...categories];
+    const categoryIndex = updatedCategories.findIndex(
+      (c) => c.id === categoryId
+    );
 
     if (categoryIndex !== -1) {
-      updatedCategories[categoryIndex].items.push(draggedItem)
+      updatedCategories[categoryIndex].items.push(draggedItem);
     }
 
-    setItems(updatedItems)
-    setCategories(updatedCategories)
-    setDraggedItem(null)
+    setItems(updatedItems);
+    setCategories(updatedCategories);
+    setDraggedItem(null);
 
     // Update score
     if (isCorrect) {
-      setScore(score + 10)
+      const newScore = score + 10;
+      setScore(newScore);
       toast({
         title: "Correct! +10 points",
-        description: `${draggedItem.text} belongs to ${categories.find((c) => c.id === categoryId)?.name}`,
+        description: `${draggedItem.text} belongs to ${
+          categories.find((c) => c.id === categoryId)?.name
+        }`,
         variant: "default",
-      })
+      });
+
+      // Check if all items are correctly placed - only check completion for correct placements
+      const correctPlacedItems = updatedItems.filter(
+        (item) => item.placed && item.category === categoryId
+      ).length;
+      const totalItemsForCategory = items.filter(
+        (item) => item.category === categoryId
+      ).length;
+
+      // Check if all items are placed correctly across all categories
+      const allItemsPlacedCorrectly = updatedItems.every(
+        (item) =>
+          !item.placed ||
+          (item.placed &&
+            categories
+              .find((c) => c.id === item.category)
+              ?.items.some((i) => i.id === item.id))
+      );
+
+      if (
+        allItemsPlacedCorrectly &&
+        updatedItems.every((item) => item.placed)
+      ) {
+        setGameComplete(true);
+        toast({
+          title: "Game Complete!",
+          description: `You scored ${newScore} points!`,
+          variant: "default",
+        });
+      }
     } else {
       toast({
         title: "Incorrect placement",
         description: `Try again! That's not the right category for ${draggedItem.text}`,
         variant: "destructive",
-      })
+      });
 
       // Remove the item from the category after a delay
       setTimeout(() => {
-        const resetCategories = [...updatedCategories]
-        const catIndex = resetCategories.findIndex((c) => c.id === categoryId)
+        const resetCategories = [...updatedCategories];
+        const catIndex = resetCategories.findIndex((c) => c.id === categoryId);
 
         if (catIndex !== -1) {
-          resetCategories[catIndex].items = resetCategories[catIndex].items.filter((item) => item.id !== draggedItem.id)
+          resetCategories[catIndex].items = resetCategories[
+            catIndex
+          ].items.filter((item) => item.id !== draggedItem.id);
         }
 
-        const resetItems = updatedItems.map((item) => (item.id === draggedItem.id ? { ...item, placed: false } : item))
+        const resetItems = updatedItems.map((item) =>
+          item.id === draggedItem.id ? { ...item, placed: false } : item
+        );
 
-        setCategories(resetCategories)
-        setItems(resetItems)
-      }, 1000)
+        setCategories(resetCategories);
+        setItems(resetItems);
+      }, 1000);
     }
-
-    // Check if all items are correctly placed
-    const allPlaced = updatedItems.every((item) => item.placed)
-    if (allPlaced) {
-      setGameComplete(true)
-      toast({
-        title: "Game Complete!",
-        description: `You scored ${score + (isCorrect ? 10 : 0)} points!`,
-        variant: "default",
-      })
-    }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -143,8 +192,8 @@ export function GameDragDrop() {
               index === 0
                 ? "border-red-400 bg-red-50"
                 : index === 1
-                  ? "border-blue-400 bg-blue-50"
-                  : "border-green-400 bg-green-50"
+                ? "border-blue-400 bg-blue-50"
+                : "border-green-400 bg-green-50"
             }`}
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(category.id)}
@@ -154,13 +203,17 @@ export function GameDragDrop() {
                 index === 0
                   ? "bg-red-100 border-b border-red-200"
                   : index === 1
-                    ? "bg-blue-100 border-b border-blue-200"
-                    : "bg-green-100 border-b border-green-200"
+                  ? "bg-blue-100 border-b border-blue-200"
+                  : "bg-green-100 border-b border-green-200"
               }`}
             >
               <CardTitle
                 className={`text-center ${
-                  index === 0 ? "text-red-700" : index === 1 ? "text-blue-700" : "text-green-700"
+                  index === 0
+                    ? "text-red-700"
+                    : index === 1
+                    ? "text-blue-700"
+                    : "text-green-700"
                 }`}
               >
                 {category.name}
@@ -175,8 +228,8 @@ export function GameDragDrop() {
                       category.id === "forces"
                         ? "bg-red-100 border border-red-300 text-red-800"
                         : category.id === "energy"
-                          ? "bg-blue-100 border border-blue-300 text-blue-800"
-                          : "bg-green-100 border border-green-300 text-green-800"
+                        ? "bg-blue-100 border border-blue-300 text-blue-800"
+                        : "bg-green-100 border border-green-300 text-green-800"
                     } rounded-md text-center font-medium shadow-sm`}
                   >
                     {item.text}
@@ -189,7 +242,9 @@ export function GameDragDrop() {
       </div>
 
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-md border border-purple-200 shadow-md">
-        <h3 className="font-bold text-lg text-purple-700 mb-3">Drag these items to their correct categories:</h3>
+        <h3 className="font-bold text-lg text-purple-700 mb-3">
+          Drag these items to their correct categories:
+        </h3>
         <div className="flex flex-wrap gap-3">
           {items
             .filter((item) => !item.placed)
@@ -202,8 +257,8 @@ export function GameDragDrop() {
                   item.category === "forces"
                     ? "bg-white border-2 border-red-400 text-red-700"
                     : item.category === "energy"
-                      ? "bg-white border-2 border-blue-400 text-blue-700"
-                      : "bg-white border-2 border-green-400 text-green-700"
+                    ? "bg-white border-2 border-blue-400 text-blue-700"
+                    : "bg-white border-2 border-green-400 text-green-700"
                 } rounded-md cursor-move hover:shadow-md transition-all duration-200 font-medium`}
               >
                 {item.text}
@@ -218,7 +273,8 @@ export function GameDragDrop() {
             Congratulations!
           </h3>
           <p className="mb-4 text-lg">
-            You completed the game with <span className="font-bold text-blue-600">{score}</span> points!
+            You completed the game with{" "}
+            <span className="font-bold text-blue-600">{score}</span> points!
           </p>
           <Button
             className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
@@ -229,6 +285,5 @@ export function GameDragDrop() {
         </div>
       )}
     </div>
-  )
+  );
 }
-
