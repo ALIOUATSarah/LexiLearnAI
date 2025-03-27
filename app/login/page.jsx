@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,23 +22,52 @@ export default function Login() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  // Debug: log when the component mounts
+  useEffect(() => {
+    console.log("Login page mounted");
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-    if (!userId || !password) {
-      setError("Please enter both ID and password");
-      return;
-    }
+    try {
+      console.log(`Attempting to log in as ${userType} with ID: ${userId}`);
 
-    // Simulate login based on user type
-    if (userType === "student") {
-      router.push("/student-dashboard");
-    } else if (userType === "parent") {
-      router.push("/parent-dashboard");
-    } else if (userType === "teacher") {
-      router.push("/teacher-dashboard");
+      if (!userId || !password) {
+        setError("Please enter both ID and password");
+        setIsLoading(false);
+        return;
+      }
+
+      // Add a small delay to simulate authentication
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Simulate login based on user type
+      if (userType === "student") {
+        console.log("Redirecting to student dashboard");
+        router.push("/student-dashboard");
+      } else if (userType === "parent") {
+        console.log("Redirecting to parent dashboard");
+        router.push("/parent-dashboard");
+      } else if (userType === "teacher") {
+        console.log("Redirecting to teacher dashboard");
+        router.push("/teacher-dashboard");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An error occurred during login. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // Alternative navigation function for testing
+  const navigateDirectly = (path) => {
+    window.location.href = path;
   };
 
   return (
@@ -131,11 +160,68 @@ export default function Login() {
 
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
             >
-              Sign In
+              {isLoading ? (
+                <div className="flex items-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
+
+          {/* Fallback navigation links */}
+          <div className="mt-4 pt-3 border-t border-gray-200">
+            <p className="text-sm text-gray-500 mb-2">
+              If redirect doesn't work, use these direct links:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => navigateDirectly("/student-dashboard")}
+                className="text-xs text-blue-600 hover:underline"
+              >
+                Student Dashboard
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateDirectly("/parent-dashboard")}
+                className="text-xs text-purple-600 hover:underline"
+              >
+                Parent Dashboard
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateDirectly("/teacher-dashboard")}
+                className="text-xs text-green-600 hover:underline"
+              >
+                Teacher Dashboard
+              </button>
+            </div>
+          </div>
         </CardContent>
         <CardFooter className="flex justify-center bg-gradient-to-r from-blue-50 to-purple-50">
           <p className="text-sm text-gray-500">
