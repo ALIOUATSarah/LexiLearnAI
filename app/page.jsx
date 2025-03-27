@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/app/components/Logo";
-import DashboardPreview from "@/app/components/DashboardPreview";
 import {
   ArrowRight,
   Brain,
@@ -15,13 +14,32 @@ import {
   MoveRight,
   Lightbulb,
   Play,
+  Menu,
+  X,
 } from "lucide-react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const dashboardImages = ["/dash1.jpg", "/dash2.jpg", "/dash3.jpg"];
+
+  // Auto-rotate dashboard images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === dashboardImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <header className="bg-white border-b sticky top-0 z-20">
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <Logo size="lg" />
 
           <div className="flex items-center gap-4">
@@ -52,11 +70,61 @@ export default function Home() {
             >
               <Link href="/login">Sign In</Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="hidden md:inline-flex">
               <Link href="/login">Get Started</Link>
             </Button>
+
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden touch-target"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6 text-gray-700" />
+              ) : (
+                <Menu className="h-6 w-6 text-gray-700" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 py-4 px-6 animate-fadeIn">
+            <nav className="flex flex-col space-y-4 text-sm font-medium mb-4">
+              <a
+                href="#features"
+                className="text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Adaptive Features
+              </a>
+              <a
+                href="#accessibility"
+                className="text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Adaptation Modes
+              </a>
+              <a
+                href="#testimonials"
+                className="text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Adaptation Stories
+              </a>
+            </nav>
+            <div className="flex flex-col space-y-2">
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild className="w-full">
+                <Link href="/login">Get Started</Link>
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="flex-1">
@@ -70,8 +138,8 @@ export default function Home() {
           <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-300 to-blue-400 rounded-full opacity-20 animate-blob animation-delay-2000"></div>
           <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-r from-teal-300 to-teal-400 rounded-full opacity-20 animate-blob animation-delay-4000"></div>
 
-          <div className="container mx-auto px-4 relative">
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="container mx-auto px-4 sm:px-6 relative">
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
               <div className="lg:w-1/2 text-center lg:text-left">
                 <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-700/10 mb-6">
                   <span className="flex items-center">
@@ -80,11 +148,11 @@ export default function Home() {
                   </span>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
                   Education That Adapts to Every Mind
                 </h1>
 
-                <p className="text-xl md:text-2xl mb-8 text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                <p className="text-lg sm:text-xl md:text-2xl mb-8 text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   Unlock personalized learning experiences that dynamically
                   adapt to each student's needs, making education accessible and
                   engaging for all learners.
@@ -93,7 +161,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md"
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md w-full sm:w-auto"
                     asChild
                   >
                     <Link href="/login" className="gap-2">
@@ -103,7 +171,7 @@ export default function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                    className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 w-full sm:w-auto"
                     asChild
                   >
                     <Link href="#demo" className="gap-2">
@@ -145,8 +213,43 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="lg:w-1/2 relative">
-                <DashboardPreview />
+              <div className="lg:w-1/2 relative w-full max-w-lg mx-auto lg:max-w-none">
+                <div className="relative w-full aspect-[16/9] rounded-lg shadow-2xl overflow-hidden">
+                  {dashboardImages.map((src, index) => (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 transition-opacity duration-1000 ${
+                        currentImageIndex === index
+                          ? "opacity-100"
+                          : "opacity-0"
+                      }`}
+                    >
+                      <Image
+                        src={src}
+                        alt={`LexiLearn Dashboard ${index + 1}`}
+                        fill
+                        className="object-cover object-center"
+                        priority={index === 0}
+                      />
+                    </div>
+                  ))}
+
+                  {/* Carousel indicators */}
+                  <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
+                    {dashboardImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                          currentImageIndex === index
+                            ? "bg-white"
+                            : "bg-white/50 hover:bg-white/80"
+                        }`}
+                        aria-label={`View dashboard image ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
                 <div className="absolute -top-6 -right-6 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
                 <div className="absolute -bottom-8 -left-8 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
               </div>
@@ -155,20 +258,20 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
+        <section id="features" className="py-16 md:py-20 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="text-center mb-12 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
                 Adaptive Intelligence
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
                 Our platform continuously adapts to each learner, creating a
                 personalized experience that evolves with every interaction.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-indigo-100 feature-card-hover">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-indigo-100 feature-card-hover">
                 <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
                   <Brain className="w-7 h-7 text-blue-600" />
                 </div>
@@ -195,7 +298,7 @@ export default function Home() {
                 </ul>
               </div>
 
-              <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-purple-100 feature-card-hover">
+              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-purple-100 feature-card-hover">
                 <div className="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-200 transition-colors">
                   <BookOpen className="w-7 h-7 text-purple-600" />
                 </div>
@@ -222,7 +325,7 @@ export default function Home() {
                 </ul>
               </div>
 
-              <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-green-100 feature-card-hover">
+              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group hover:border-green-100 feature-card-hover">
                 <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors">
                   <BarChart3 className="w-7 h-7 text-green-600" />
                 </div>

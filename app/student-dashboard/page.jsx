@@ -261,12 +261,28 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50">
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Logo mode={mode} />
+        <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+          <div className="flex justify-between items-center w-full sm:w-auto mb-4 sm:mb-0">
+            <Logo mode={mode} />
 
-          <div className="flex items-center gap-4">
-            {/* Mode switcher for demo */}
-            <div className="mr-4">
+            {/* Mobile-only mode switcher */}
+            <div className="sm:hidden">
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+                className="p-2 border rounded-md text-sm"
+              >
+                <option value="normal">Standard Mode</option>
+                <option value="dyslexia">Dyslexia Support</option>
+                <option value="adhd">ADHD Support</option>
+                <option value="executive">Executive Function Support</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            {/* Desktop-only mode switcher */}
+            <div className="hidden sm:block mr-4">
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value)}
@@ -279,22 +295,15 @@ export default function StudentDashboard() {
               </select>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 w-full sm:w-auto">
               <Button
                 variant="outline"
-                className="border-green-300 text-green-600 hidden sm:flex"
-                asChild
-              >
-                <Link href="/quiz">Take a Quiz</Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="border-purple-300 text-purple-600"
+                className="border-purple-300 text-purple-600 text-xs sm:text-sm px-2 sm:px-3"
                 asChild
               >
                 <Link href="/games">Play Games</Link>
               </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm px-2 sm:px-3">
                 <Link href="/lessons" className="text-white">
                   My Lessons
                 </Link>
@@ -307,12 +316,12 @@ export default function StudentDashboard() {
       {/* Executive Function Scaffolding System Banner */}
       {mode === "executive" && (
         <div className="bg-gradient-to-r from-teal-50 to-blue-50 border-b border-teal-200 sticky top-16 z-10">
-          <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-            <div className="flex items-center space-x-2">
+          <div className="container mx-auto px-4 py-2 flex flex-col sm:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-2 sm:mb-0">
               <div className="bg-teal-100 rounded-full p-1.5">
                 <BrainCircuit className="h-4 w-4 text-teal-600" />
               </div>
-              <span className="font-medium text-teal-800">
+              <span className="font-medium text-teal-800 text-sm">
                 Executive Function Support
               </span>
               <div
@@ -396,8 +405,8 @@ export default function StudentDashboard() {
                     Support Levels
                   </h4>
                   <div className="space-y-4">
-                    <div className="bg-teal-50 p-3 rounded-lg border border-teal-100 flex items-center">
-                      <div className="w-16 text-right font-medium text-teal-800 mr-3">
+                    <div className="bg-teal-50 p-3 rounded-lg border border-teal-100 flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-16 text-center sm:text-right font-medium text-teal-800 mb-2 sm:mb-0 sm:mr-3">
                         High
                       </div>
                       <div className="flex-1">
@@ -414,38 +423,38 @@ export default function StudentDashboard() {
                       </div>
                     </div>
 
-                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 flex items-center">
-                      <div className="w-16 text-right font-medium text-blue-800 mr-3">
+                    <div className="bg-teal-50 p-3 rounded-lg border border-teal-100 flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-16 text-center sm:text-right font-medium text-teal-800 mb-2 sm:mb-0 sm:mr-3">
                         Medium
                       </div>
                       <div className="flex-1">
                         <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden mb-1.5">
                           <div
-                            className="h-full bg-blue-500 rounded-full"
-                            style={{ width: "65%" }}
+                            className="h-full bg-teal-600 rounded-full"
+                            style={{ width: "67%" }}
                           ></div>
                         </div>
                         <div className="text-xs text-gray-600">
-                          Less detailed task breakdowns, periodic reminders,
-                          guided structure
+                          Basic task organization, occasional prompts, guided
+                          check-ins
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100 flex items-center">
-                      <div className="w-16 text-right font-medium text-indigo-800 mr-3">
+                    <div className="bg-teal-50 p-3 rounded-lg border border-teal-100 flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-16 text-center sm:text-right font-medium text-teal-800 mb-2 sm:mb-0 sm:mr-3">
                         Low
                       </div>
                       <div className="flex-1">
                         <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden mb-1.5">
                           <div
-                            className="h-full bg-indigo-400 rounded-full"
-                            style={{ width: "30%" }}
+                            className="h-full bg-teal-600 rounded-full"
+                            style={{ width: "33%" }}
                           ></div>
                         </div>
                         <div className="text-xs text-gray-600">
-                          Minimal task breakdowns, infrequent reminders,
-                          student-initiated structure
+                          Self-monitored workflow, subtle reminders, independent
+                          planning
                         </div>
                       </div>
                     </div>
@@ -517,7 +526,7 @@ export default function StudentDashboard() {
 
       {/* Streamlined Adaptive Tips */}
       {mode === "executive" && showAdaptiveTips && (
-        <div className="fixed bottom-4 left-4 z-40 bg-white border border-teal-200 rounded-lg shadow-lg max-w-xs animate-fadeIn">
+        <div className="fixed bottom-4 left-4 z-40 bg-white border border-teal-200 rounded-lg shadow-lg max-w-xs animate-fadeIn fixed-element-mobile-adjust">
           <div className="flex items-start p-3 relative overflow-hidden">
             <div
               className="absolute bottom-0 left-0 h-1 bg-teal-500 animate-shrink"
@@ -551,7 +560,7 @@ export default function StudentDashboard() {
 
       {/* Improved Transition Warning */}
       {mode === "executive" && transitionWarning && (
-        <div className="fixed bottom-4 right-4 z-50 bg-white border-l-4 border-amber-400 rounded-lg shadow-lg max-w-md animate-fadeIn">
+        <div className="fixed bottom-4 right-4 z-50 bg-white border-l-4 border-amber-400 rounded-lg shadow-lg max-w-md animate-fadeIn fixed-element-mobile-adjust">
           <div className="p-4 pr-12">
             <div className="flex items-start">
               <AlertCircle className="h-5 w-5 text-amber-500 mr-3 flex-shrink-0 mt-0.5" />
@@ -1247,11 +1256,31 @@ export default function StudentDashboard() {
 
           {/* Tabs Section */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">Quiz History</TabsTrigger>
-              <TabsTrigger value="review">Spaced Review</TabsTrigger>
-              <TabsTrigger value="achievements">Achievements</TabsTrigger>
-              <TabsTrigger value="lessons">My Lessons</TabsTrigger>
+            <TabsList className="flex flex-wrap justify-start gap-2 mb-6 bg-transparent p-0">
+              <TabsTrigger
+                value="overview"
+                className="px-4 py-2.5 rounded-md bg-white hover:bg-gray-50 data-[state=active]:bg-primary data-[state=active]:text-white shadow-sm"
+              >
+                Quiz History
+              </TabsTrigger>
+              <TabsTrigger
+                value="review"
+                className="px-4 py-2.5 rounded-md bg-white hover:bg-gray-50 data-[state=active]:bg-primary data-[state=active]:text-white shadow-sm"
+              >
+                Spaced Review
+              </TabsTrigger>
+              <TabsTrigger
+                value="achievements"
+                className="px-4 py-2.5 rounded-md bg-white hover:bg-gray-50 data-[state=active]:bg-primary data-[state=active]:text-white shadow-sm"
+              >
+                Achievements
+              </TabsTrigger>
+              <TabsTrigger
+                value="lessons"
+                className="px-4 py-2.5 rounded-md bg-white hover:bg-gray-50 data-[state=active]:bg-primary data-[state=active]:text-white shadow-sm"
+              >
+                My Lessons
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="mt-6">

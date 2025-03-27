@@ -1414,6 +1414,31 @@ export default function CoursePage() {
           transition: all 0.3s ease;
         }
 
+        /* Responsive adjustments for adaptive controls on mobile */
+        @media (max-width: 640px) {
+          .adaptive-sensory .adaptive-control {
+            position: fixed;
+            right: 10px;
+            top: 70px;
+            padding: 8px;
+            max-width: 200px;
+            font-size: 0.9rem;
+          }
+
+          .adaptive-sensory .sensory-break-button {
+            right: 10px;
+            bottom: 70px;
+            width: 50px;
+            height: 50px;
+          }
+
+          .focus-mode .main-content {
+            max-width: 100%;
+            margin: 0 10px;
+            padding: 1rem;
+          }
+        }
+
         .adaptive-sensory .sensory-break-button:hover {
           transform: scale(1.1);
           background: #4338ca;
@@ -1523,6 +1548,31 @@ export default function CoursePage() {
           opacity: 1;
         }
 
+        /* Responsive adjustments for floating buttons on mobile */
+        @media (max-width: 640px) {
+          .floating-action-buttons {
+            bottom: 2px;
+            right: 2px;
+            flex-direction: column-reverse;
+            gap: 8px;
+          }
+
+          .floating-action-buttons .action-button {
+            transform: scale(0.9);
+          }
+
+          .floating-action-buttons .action-button.active {
+            transform: scale(1);
+          }
+
+          .custom-tooltip {
+            font-size: 12px;
+            padding: 4px 8px;
+            max-width: 80vw;
+            white-space: normal;
+          }
+        }
+
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -1609,7 +1659,7 @@ export default function CoursePage() {
         <div className="relative">
           <button
             onClick={() => setDownloadOptions(!downloadOptions)}
-            className={`action-button rounded-full p-3 shadow-lg ${
+            className={`action-button rounded-full p-2 sm:p-3 shadow-lg ${
               downloadOptions
                 ? mode === "dyslexia"
                   ? "bg-amber-500 text-white"
@@ -1984,112 +2034,134 @@ export default function CoursePage() {
         )}
       </div>
 
-      <header
-        className={`bg-white border-b sticky top-0 z-10 shadow-sm ${
-          isFocusMode ? "focus-header" : ""
-        }`}
-      >
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Logo mode={mode} />
-
-          <div className="flex items-center gap-4">
-            <Tabs
-              value={mode}
-              onValueChange={(value) => setMode(value)}
-              className="bg-gray-100 p-1 rounded-lg"
-            >
-              <TabsList className="bg-transparent">
-                <TabsTrigger
-                  value="normal"
-                  className={mode === "normal" ? "bg-white shadow-sm" : ""}
-                >
-                  Standard Mode
-                </TabsTrigger>
-                <TabsTrigger
-                  value="dyslexia"
-                  className={
-                    mode === "dyslexia"
-                      ? "bg-amber-100 text-amber-900 shadow-sm font-sans tracking-wide"
-                      : ""
-                  }
-                >
-                  Dyslexia Support
-                </TabsTrigger>
-                <TabsTrigger
-                  value="adhd"
-                  className={
-                    mode === "adhd" ? "bg-blue-100 text-blue-900 shadow-sm" : ""
-                  }
-                >
-                  ADHD Support
-                </TabsTrigger>
-                <TabsTrigger
-                  value="adaptive"
-                  className={
-                    mode === "adaptive"
-                      ? "bg-indigo-100 text-indigo-900 shadow-sm"
-                      : ""
-                  }
-                >
-                  Adaptive
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                className="border-blue-300 text-blue-600"
-                asChild
+      <header className="bg-white border-b sticky top-0 z-20">
+        <div className="container mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center">
+          <div className="flex justify-between items-center w-full sm:w-auto mb-3 sm:mb-0">
+            <div className="flex items-center">
+              <Link
+                href="/lessons"
+                className="text-gray-500 hover:text-gray-700 mr-2"
+                aria-label="Back to lessons"
               >
-                <Link href="/lessons">All Courses</Link>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="border-purple-300 text-purple-600"
-                asChild
-              >
-                <Link href="/student-dashboard">My Dashboard</Link>
-              </Button>
-
-              {/* Text-to-speech toggle (only in dyslexia mode) */}
-              {mode === "dyslexia" && (
-                <button
-                  onClick={toggleAutoRead}
-                  className={`action-button rounded-full p-2 shadow-sm ${
-                    autoReadEnabled
-                      ? "bg-amber-500 text-white active"
-                      : "bg-white text-amber-700 border border-amber-300"
-                  }`}
-                  aria-label={
-                    autoReadEnabled
-                      ? "Disable cursor text-to-speech"
-                      : "Enable cursor text-to-speech"
-                  }
-                  title={
-                    autoReadEnabled
-                      ? "Disable cursor text-to-speech"
-                      : "Enable cursor text-to-speech"
-                  }
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
+                  <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                  >
-                    <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                  </svg>
-                </button>
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </Link>
+              <Logo mode={mode} size="sm" />
+            </div>
+
+            {/* Mobile mode dropdown */}
+            <div className="sm:hidden">
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+                className="p-1.5 border rounded-md text-xs"
+              >
+                <option value="normal">Standard Mode</option>
+                <option value="dyslexia">Dyslexia Mode</option>
+                <option value="adhd">ADHD Mode</option>
+                <option value="adaptive">Adaptive Mode</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center sm:justify-end items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+            {/* Desktop-only mode switcher */}
+            <div className="hidden sm:flex items-center mr-2">
+              <span className="text-sm text-gray-500 mr-2">Mode:</span>
+              <div className="flex gap-1">
+                <Button
+                  size="sm"
+                  variant={mode === "normal" ? "default" : "outline"}
+                  onClick={() => setMode("normal")}
+                  className="h-8 text-xs"
+                >
+                  Standard
+                </Button>
+                <Button
+                  size="sm"
+                  variant={mode === "dyslexia" ? "default" : "outline"}
+                  onClick={() => setMode("dyslexia")}
+                  className="h-8 text-xs"
+                >
+                  Dyslexia
+                </Button>
+                <Button
+                  size="sm"
+                  variant={mode === "adhd" ? "default" : "outline"}
+                  onClick={() => setMode("adhd")}
+                  className="h-8 text-xs"
+                >
+                  ADHD
+                </Button>
+                <Button
+                  size="sm"
+                  variant={mode === "adaptive" ? "default" : "outline"}
+                  onClick={() => setMode("adaptive")}
+                  className="h-8 text-xs"
+                >
+                  Adaptive
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleFocusMode}
+                ref={focusModeButtonRef}
+                className="h-8 text-xs sm:text-sm px-1 sm:px-2"
+              >
+                <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+                <span>Focus</span>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleAutoRead}
+                className={`h-8 text-xs sm:text-sm px-1 sm:px-2 ${
+                  autoReadEnabled ? "bg-blue-50 border-blue-300" : ""
+                }`}
+              >
+                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+                <span className="hidden xs:inline">Auto-Read</span>
+              </Button>
+
+              {mode === "adaptive" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => renderColorSettings()}
+                  className="h-8 text-xs sm:text-sm px-1 sm:px-2"
+                >
+                  <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
+                  <span className="hidden xs:inline">Settings</span>
+                </Button>
               )}
+
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs sm:text-sm px-1 sm:px-2"
+              >
+                <Link href="/student-dashboard">
+                  <span>Dashboard</span>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -2201,7 +2273,7 @@ export default function CoursePage() {
 
         <div className="flex mb-6 border-b pb-1 overflow-x-auto scrollbar-hide">
           <button
-            className={`px-4 py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
               activeTab === "content"
                 ? mode === "dyslexia"
                   ? "text-amber-900 border-b-2 border-amber-500 bg-amber-50"
@@ -2212,15 +2284,19 @@ export default function CoursePage() {
             }`}
             onClick={() => setActiveTab("content")}
           >
-            <div className="flex items-center gap-2 whitespace-nowrap">
+            <div className="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
               <BookOpen size={mode === "dyslexia" ? 22 : 18} />
-              <span className={mode === "dyslexia" ? "text-lg" : ""}>
+              <span
+                className={
+                  mode === "dyslexia" ? "text-lg" : "text-sm sm:text-base"
+                }
+              >
                 Course Content
               </span>
             </div>
           </button>
           <button
-            className={`px-4 py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
               activeTab === "materials"
                 ? mode === "dyslexia"
                   ? "text-amber-900 border-b-2 border-amber-500 bg-amber-50"
@@ -2231,15 +2307,19 @@ export default function CoursePage() {
             }`}
             onClick={() => setActiveTab("materials")}
           >
-            <div className="flex items-center gap-2 whitespace-nowrap">
+            <div className="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
               <FileDown size={mode === "dyslexia" ? 22 : 18} />
-              <span className={mode === "dyslexia" ? "text-lg" : ""}>
+              <span
+                className={
+                  mode === "dyslexia" ? "text-lg" : "text-sm sm:text-base"
+                }
+              >
                 Course Materials
               </span>
             </div>
           </button>
           <button
-            className={`px-4 py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium transition-all duration-200 rounded-t-lg focus-element ${
               activeTab === "notes"
                 ? mode === "dyslexia"
                   ? "text-amber-900 border-b-2 border-amber-500 bg-amber-50"
@@ -2250,9 +2330,13 @@ export default function CoursePage() {
             }`}
             onClick={() => setActiveTab("notes")}
           >
-            <div className="flex items-center gap-2 whitespace-nowrap">
+            <div className="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
               <FileText size={mode === "dyslexia" ? 22 : 18} />
-              <span className={mode === "dyslexia" ? "text-lg" : ""}>
+              <span
+                className={
+                  mode === "dyslexia" ? "text-lg" : "text-sm sm:text-base"
+                }
+              >
                 Study Notes
               </span>
             </div>

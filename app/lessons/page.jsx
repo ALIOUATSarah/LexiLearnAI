@@ -159,30 +159,59 @@ export default function Lessons() {
       `}</style>
 
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Logo mode={mode} />
+        <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+          <div className="flex justify-between items-center w-full sm:w-auto mb-4 sm:mb-0">
+            <Logo mode={mode} />
 
-          <div className="flex items-center gap-4">
-            <Tabs value={mode} onValueChange={(value) => setMode(value)}>
-              <TabsList>
-                <TabsTrigger value="normal">Normal Mode</TabsTrigger>
-                <TabsTrigger value="dyslexia">Dyslexia Mode</TabsTrigger>
-                <TabsTrigger value="adhd">ADHD Mode</TabsTrigger>
-                <TabsTrigger value="adaptive">Adaptive</TabsTrigger>
-              </TabsList>
-            </Tabs>
+            {/* Mobile toggle button for modes */}
+            <div className="sm:hidden">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // Cycle through modes
+                  const modes = ["normal", "dyslexia", "adhd", "adaptive"];
+                  const currentIndex = modes.indexOf(mode);
+                  const nextIndex = (currentIndex + 1) % modes.length;
+                  setMode(modes[nextIndex]);
+                }}
+                className="text-xs"
+              >
+                Change Mode
+              </Button>
+            </div>
+          </div>
 
-            <Button
-              variant="outline"
-              className="border-blue-300 text-blue-600"
-              asChild
-            >
-              <Link href="/student-dashboard">My Dashboard</Link>
-            </Button>
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            {/* Desktop mode tabs */}
+            <div className="hidden sm:block">
+              <Tabs value={mode} onValueChange={(value) => setMode(value)}>
+                <TabsList>
+                  <TabsTrigger value="normal">Normal Mode</TabsTrigger>
+                  <TabsTrigger value="dyslexia">Dyslexia Mode</TabsTrigger>
+                  <TabsTrigger value="adhd">ADHD Mode</TabsTrigger>
+                  <TabsTrigger value="adaptive">Adaptive</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
 
-            <Button variant="outline" asChild>
-              <Link href="/login">Logout</Link>
-            </Button>
+            <div className="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
+              <Button
+                variant="outline"
+                className="border-blue-300 text-blue-600 text-xs sm:text-sm px-2 sm:px-3"
+                asChild
+              >
+                <Link href="/student-dashboard">My Dashboard</Link>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+                asChild
+              >
+                <Link href="/login">Logout</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -368,24 +397,6 @@ export default function Lessons() {
                   />
                 </CardContent>
                 <CardFooter className="bg-gray-50 px-4 py-3 border-t">
-                  <Button
-                    variant={mode === "adhd" ? "default" : "ghost"}
-                    size="sm"
-                    className={`ml-auto ${
-                      mode === "adhd"
-                        ? `${course.color.replace(
-                            "bg-",
-                            "bg-"
-                          )} hover:opacity-90 text-white`
-                        : `hover:${course.color.replace(
-                            "bg-",
-                            "bg-"
-                          )} hover:text-white`
-                    }`}
-                  >
-                    Continue Learning
-                  </Button>
-
                   <Button
                     size="lg"
                     className={`

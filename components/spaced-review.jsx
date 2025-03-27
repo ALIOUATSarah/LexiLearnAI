@@ -21,6 +21,9 @@ import {
   BookOpen,
   CheckCircle,
   XCircle,
+  RefreshCcw,
+  Settings,
+  BarChart2,
 } from "lucide-react";
 
 export function SpacedReview({ studentId = "S12345" }) {
@@ -32,6 +35,14 @@ export function SpacedReview({ studentId = "S12345" }) {
   const [isReviewComplete, setIsReviewComplete] = useState(false);
   const [reviewItems, setReviewItems] = useState([]);
   const { toast } = useToast();
+  const [showSettings, setShowSettings] = useState(false);
+  const [algorithm, setAlgorithm] = useState("standard");
+  const [dailyCount, setDailyCount] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
+  const [reviewedCount, setReviewedCount] = useState(0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 
   // Mock student's difficult questions for review
   const mockReviewData = {
@@ -275,17 +286,75 @@ export function SpacedReview({ studentId = "S12345" }) {
     }
   };
 
+  const handleRefresh = () => {
+    // Implement refresh logic
+  };
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+  const handleRevealAnswer = () => {
+    setShowAnswer(true);
+  };
+
+  const handleRateRecall = (difficulty) => {
+    // In a real app, this would update the spaced repetition algorithm
+    // with the student's reported recall difficulty
+    setSelectedDifficulty(difficulty);
+
+    // Mock update the review items
+    const updatedItems = [...reviewItems];
+    updatedItems[currentQuestion].lastRecallDifficulty = difficulty;
+    setReviewItems(updatedItems);
+
+    // Show the next question after a brief delay
+    setTimeout(() => {
+      if (currentQuestion < reviewItems.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedOption(null);
+        setIsCorrect(null);
+        setShowAnswer(false);
+      } else {
+        setIsReviewComplete(true);
+        toast({
+          title: "Review Complete!",
+          description: "Great job completing your spaced repetition review.",
+        });
+      }
+    }, 1000);
+  };
+
+  const formatItemType = (type) => {
+    // Implement formatItemType logic
+  };
+
+  const formatTimeAgo = (time) => {
+    // Implement formatTimeAgo logic
+  };
+
+  const formatNextReview = (lastReviewed, rating) => {
+    // Implement formatNextReview logic
+  };
+
+  const getItemTypeIcon = (type, reviewed) => {
+    // Implement getItemTypeIcon logic
+  };
+
   if (reviewItems.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md text-center">
-        <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-          <BookOpen className="w-8 h-8 text-blue-600" />
+      <div className="p-4 sm:p-8 flex justify-center items-center min-h-[300px]">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-100 mb-4">
+            <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-1">
+            All Caught Up!
+          </h3>
+          <p className="text-gray-500 text-sm sm:text-base">
+            You have no review items scheduled for today.
+          </p>
         </div>
-        <h2 className="text-xl font-bold mb-2">No Review Items</h2>
-        <p className="text-gray-600 mb-4">
-          You don't have any questions that need review at the moment.
-        </p>
-        <Button className="bg-blue-500 hover:bg-blue-600">Go to Lessons</Button>
       </div>
     );
   }
@@ -293,222 +362,149 @@ export function SpacedReview({ studentId = "S12345" }) {
   return (
     <div className="max-w-3xl mx-auto">
       {!isReviewComplete ? (
-        <div className="space-y-6">
-          {/* Header information */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <Badge className="bg-purple-100 text-purple-700 px-3 py-1">
-                <Brain className="w-4 h-4 mr-1" /> Spaced Review
-              </Badge>
-              <span className="text-sm text-gray-500">
+        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+            <div className="mb-4 sm:mb-0">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Spaced Review
+              </h2>
+              <p className="text-sm text-gray-600">
                 Question {currentQuestion + 1} of {reviewItems.length}
-              </span>
+              </p>
+            </div>
+            <div className="flex space-x-1">
+              {reviewItems.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-1.5 w-4 sm:w-6 rounded-full ${
+                    index < currentQuestion
+                      ? "bg-indigo-500"
+                      : index === currentQuestion
+                      ? "bg-indigo-300"
+                      : "bg-gray-200"
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <div className="flex items-center mb-2">
+              <div className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                {reviewItems[currentQuestion].subject}
+              </div>
             </div>
 
-            {streak >= 2 && (
-              <Badge className="bg-green-100 text-green-700 px-3 py-1">
-                <Trophy className="w-4 h-4 mr-1" /> Streak: {streak}
-              </Badge>
+            <h3 className="text-lg sm:text-xl font-medium text-gray-800 mb-4">
+              {reviewItems[currentQuestion].question}
+            </h3>
+
+            {showAnswer ? (
+              <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-4 sm:p-5 md:p-6 mb-6">
+                <h4 className="font-medium text-indigo-900 mb-2 text-sm sm:text-base">
+                  Answer:
+                </h4>
+                <div className="prose prose-sm sm:prose max-w-none">
+                  <p>
+                    {
+                      reviewItems[currentQuestion].options[
+                        reviewItems[currentQuestion].correctAnswer
+                      ]
+                    }
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleRevealAnswer}
+                className="w-full py-5 border-2 border-dashed border-indigo-300 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors mb-6"
+              >
+                Reveal Answer
+              </button>
+            )}
+
+            {showAnswer && (
+              <div className="animate-fadeIn">
+                <h4 className="font-medium text-gray-700 mb-3 text-sm sm:text-base">
+                  How well did you recall this?
+                </h4>
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <button
+                    onClick={() => handleRateRecall("Easy")}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedDifficulty === "Easy"
+                        ? "bg-green-500 text-white"
+                        : "bg-green-100 text-green-700 hover:bg-green-200"
+                    }`}
+                  >
+                    Easy
+                  </button>
+                  <button
+                    onClick={() => handleRateRecall("Medium")}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedDifficulty === "Medium"
+                        ? "bg-yellow-500 text-white"
+                        : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+                    }`}
+                  >
+                    Medium
+                  </button>
+                  <button
+                    onClick={() => handleRateRecall("Hard")}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedDifficulty === "Hard"
+                        ? "bg-red-500 text-white"
+                        : "bg-red-100 text-red-700 hover:bg-red-200"
+                    }`}
+                  >
+                    Hard
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Progress bar */}
-          <Progress
-            value={((currentQuestion + 1) / reviewItems.length) * 100}
-            className="h-2 bg-gray-100"
-            indicatorClassName="bg-purple-500"
-          />
-
-          {/* Question card */}
-          <Card
-            className={`border-2 border-${reviewItems[
-              currentQuestion
-            ]?.subject?.toLowerCase()}-300 ${getSubjectStyle(
-              reviewItems[currentQuestion]?.subject
-            )}`}
-          >
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <div>
-                  <Badge
-                    className={getSubjectBadgeStyle(
-                      reviewItems[currentQuestion]?.subject
-                    )}
-                  >
-                    {reviewItems[currentQuestion]?.subject}
-                  </Badge>
-                  <span className="text-sm text-gray-500 ml-2">
-                    {reviewItems[currentQuestion]?.topic}
-                  </span>
-                </div>
-                <div className="text-sm text-gray-500">
-                  <Clock className="w-4 h-4 inline-block mr-1" />
-                  {reviewItems[currentQuestion]?.mistakeCount > 1
-                    ? `Missed ${reviewItems[currentQuestion]?.mistakeCount} times`
-                    : `Missed once`}
-                </div>
+          <div className="flex justify-between items-center border-t pt-4 mt-4">
+            <div className="text-xs sm:text-sm text-gray-500">
+              Last reviewed:{" "}
+              {new Date(
+                reviewItems[currentQuestion].lastReviewed
+              ).toLocaleDateString()}
+            </div>
+            {showAnswer && selectedDifficulty && (
+              <div className="animate-fadeIn text-xs sm:text-sm text-gray-500">
+                Next review:{" "}
+                {selectedDifficulty === "Easy"
+                  ? "7 days"
+                  : selectedDifficulty === "Medium"
+                  ? "3 days"
+                  : "Tomorrow"}
               </div>
-              <CardTitle className="text-xl mt-3">
-                {reviewItems[currentQuestion]?.question}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <RadioGroup
-                value={selectedOption?.toString()}
-                onValueChange={handleOptionSelect}
-              >
-                <div className="space-y-3">
-                  {reviewItems[currentQuestion]?.options.map(
-                    (option, index) => (
-                      <div
-                        key={index}
-                        className={`
-                        flex items-center space-x-2 p-3 rounded-md border
-                        ${
-                          isCorrect !== null &&
-                          index === reviewItems[currentQuestion]?.correctAnswer
-                            ? "border-green-500 bg-green-50"
-                            : isCorrect === false && index === selectedOption
-                            ? "border-red-500 bg-red-50"
-                            : "border-gray-200 hover:border-purple-300 hover:bg-purple-50"
-                        }
-                        ${
-                          selectedOption === index && isCorrect === null
-                            ? "border-purple-500 bg-purple-50"
-                            : ""
-                        }
-                        transition-colors
-                      `}
-                        onClick={() =>
-                          isCorrect === null &&
-                          handleOptionSelect(index.toString())
-                        }
-                      >
-                        <RadioGroupItem
-                          value={index.toString()}
-                          id={`option-${index}`}
-                          disabled={isCorrect !== null}
-                          className={
-                            isCorrect !== null ? "pointer-events-none" : ""
-                          }
-                        />
-                        <Label
-                          htmlFor={`option-${index}`}
-                          className="flex-1 cursor-pointer font-normal"
-                        >
-                          {option}
-                        </Label>
-
-                        {isCorrect !== null &&
-                          index ===
-                            reviewItems[currentQuestion]?.correctAnswer && (
-                            <CheckCircle className="w-5 h-5 text-green-600" />
-                          )}
-
-                        {isCorrect === false && index === selectedOption && (
-                          <XCircle className="w-5 h-5 text-red-600" />
-                        )}
-                      </div>
-                    )
-                  )}
-                </div>
-              </RadioGroup>
-
-              <div className="mt-6 flex justify-center">
-                <Button
-                  className="bg-purple-600 hover:bg-purple-700 px-8"
-                  onClick={handleSubmit}
-                  disabled={selectedOption === null || isCorrect !== null}
-                >
-                  {isCorrect !== null ? "Processing..." : "Submit Answer"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
         </div>
       ) : (
-        <Card className="border-2 border-purple-300 shadow-md">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl">
-              Review Complete!
-            </CardTitle>
-            <CardDescription className="text-center text-base">
-              Great job completing your spaced review session
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="py-4 text-center">
-              <div className="w-24 h-24 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                <Brain className="w-12 h-12 text-purple-600" />
-              </div>
-
-              <div className="relative w-full h-4 bg-gray-100 rounded-full overflow-hidden mt-6 mb-2">
-                <div
-                  className="absolute top-0 left-0 h-full bg-purple-500"
-                  style={{ width: `${calculateMastery()}%` }}
-                ></div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                {calculateMastery()}% mastery of review materials
-              </p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="text-center bg-green-50 rounded-lg p-3">
-                <div className="text-2xl font-bold text-green-600">
-                  {
-                    reviewItems.filter(
-                      (item) =>
-                        reviewHistory[item.id] &&
-                        reviewHistory[item.id].reviewLevel >= 3
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-gray-600">Mastered</div>
-              </div>
-
-              <div className="text-center bg-yellow-50 rounded-lg p-3">
-                <div className="text-2xl font-bold text-yellow-600">
-                  {
-                    reviewItems.filter(
-                      (item) =>
-                        reviewHistory[item.id] &&
-                        reviewHistory[item.id].reviewLevel >= 1 &&
-                        reviewHistory[item.id].reviewLevel < 3
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-gray-600">Learning</div>
-              </div>
-
-              <div className="text-center bg-red-50 rounded-lg p-3">
-                <div className="text-2xl font-bold text-red-600">
-                  {
-                    reviewItems.filter(
-                      (item) =>
-                        !reviewHistory[item.id] ||
-                        reviewHistory[item.id].reviewLevel === 0
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-gray-600">Challenging</div>
-              </div>
-            </div>
-
-            <div className="flex justify-center space-x-4">
-              <Button
-                variant="outline"
-                className="border-purple-300 text-purple-600"
-                onClick={resetReview}
-              >
-                Review Again
-              </Button>
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                Return to Dashboard
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white rounded-xl shadow-sm border p-6 sm:p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-100 mb-4 sm:mb-6">
+            <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 text-green-600" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
+            Review Complete!
+          </h3>
+          <p className="text-gray-600 mb-6 text-sm sm:text-base">
+            Great job! You've completed your spaced repetition review for today.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <BarChart2 className="h-4 w-4 mr-2" />
+              View Progress
+            </button>
+            <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <RefreshCcw className="h-4 w-4 mr-2" />
+              Start Another Set
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

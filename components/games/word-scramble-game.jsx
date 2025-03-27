@@ -7,6 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, Zap, CheckCircle, XCircle, Trophy } from "lucide-react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 export function GameWordScramble({ courseTopic = "default" }) {
   const [currentWord, setCurrentWord] = useState(null);
@@ -227,7 +234,7 @@ export function GameWordScramble({ courseTopic = "default" }) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md">
+    <div className="flex flex-col space-y-4">
       {!isGameOver && !currentWord && (
         <div className="text-center space-y-6">
           <h1 className="text-3xl font-bold text-gray-800">Word Scramble</h1>
@@ -258,100 +265,104 @@ export function GameWordScramble({ courseTopic = "default" }) {
       )}
 
       {!isGameOver && currentWord && (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <Badge className="bg-blue-100 text-blue-700 px-3 py-1 text-sm">
-                Round {round}/10
-              </Badge>
-              <Badge className="bg-green-100 text-green-700 px-3 py-1 text-sm">
+        <div>
+          <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
+            <div className="flex flex-wrap gap-2">
+              <div className="py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm">
+                Word {round}/10
+              </div>
+              <div className="py-1 px-3 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm">
                 Score: {score}
-              </Badge>
-              {streak > 1 && (
-                <Badge className="bg-purple-100 text-purple-700 px-3 py-1 text-sm">
+              </div>
+              {streak > 0 && (
+                <div className="py-1 px-3 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm">
                   Streak: {streak}x
-                </Badge>
+                </div>
               )}
             </div>
-            <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-gray-500" />
-              <span
-                className={`font-mono font-bold ${
-                  timeRemaining < 10 ? "text-red-500" : "text-gray-700"
-                }`}
-              >
-                {timeRemaining}s
-              </span>
-            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-red-300 text-red-600 text-xs sm:text-sm"
+              onClick={startGame}
+            >
+              Reset
+            </Button>
           </div>
 
-          <Progress
-            value={(timeRemaining / 60) * 100}
-            className="h-2 bg-gray-100"
-            indicatorClassName="bg-gradient-to-r from-green-400 to-blue-500"
-          />
+          <Card className="border-2 border-blue-300 mb-4 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-200 p-3 sm:p-4">
+              <CardTitle className="text-center text-lg text-blue-800">
+                Unscramble the word
+              </CardTitle>
+              <CardDescription className="text-center">
+                Drag letters to rearrange them
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 sm:p-6">
+              <div className="bg-blue-50 p-3 mb-4 rounded-lg border border-blue-200 text-center">
+                <span className="text-gray-600 text-sm">Hint: </span>
+                <span className="font-medium text-gray-800">
+                  {currentWord.hint}
+                </span>
+              </div>
 
-          <div className="bg-blue-50 p-6 rounded-xl shadow-sm text-center">
-            <h2 className="text-gray-500 mb-2 text-sm uppercase font-semibold">
-              Hint
-            </h2>
-            <p className="text-gray-700 font-medium">{currentWord.hint}</p>
-
-            <div className="mt-6 mb-4">
-              <h2 className="text-gray-500 mb-3 text-sm uppercase font-semibold">
-                Unscramble this word
-              </h2>
-              <div className="flex justify-center">
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
                 {scrambledWord.split("").map((letter, index) => (
                   <div
                     key={index}
-                    className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center m-1 bg-white border-2 border-blue-300 rounded-md shadow-sm text-base sm:text-xl font-bold text-blue-700"
+                    className="w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-blue-400 rounded-md flex items-center justify-center text-lg sm:text-xl font-bold text-blue-700 cursor-move shadow-sm"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, index)}
                   >
                     {letter}
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
 
-          <div className="mt-6 space-y-4">
-            <div className="flex space-x-2">
-              <Input
-                type="text"
-                value={userInput}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyPress}
-                placeholder="Type your answer..."
-                className={`text-center text-lg ${
-                  isCorrect === true
-                    ? "border-green-500 bg-green-50"
-                    : isCorrect === false
-                    ? "border-red-500 bg-red-50"
-                    : ""
-                }`}
-                autoFocus
-              />
-              <Button
-                onClick={checkAnswer}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                Check
-              </Button>
-            </div>
-
-            {isCorrect === true && (
-              <div className="flex items-center justify-center text-green-600">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                <span>Correct!</span>
+              <div className="flex justify-center">
+                <Button
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 w-full sm:w-auto px-8"
+                  onClick={checkAnswer}
+                >
+                  Submit
+                </Button>
               </div>
-            )}
+            </CardContent>
+          </Card>
 
-            {isCorrect === false && (
-              <div className="flex items-center justify-center text-red-600">
-                <XCircle className="w-5 h-5 mr-2" />
-                <span>Try again!</span>
-              </div>
-            )}
+          {isCorrect === true && (
+            <div className="flex items-center justify-center text-green-600">
+              <CheckCircle className="w-5 h-5 mr-2" />
+              <span>Correct!</span>
+            </div>
+          )}
+
+          {isCorrect === false && (
+            <div className="flex items-center justify-center text-red-600">
+              <XCircle className="w-5 h-5 mr-2" />
+              <span>Try again!</span>
+            </div>
+          )}
+
+          {/* Game progress */}
+          <div className="mt-4">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-xs sm:text-sm text-gray-600">Progress</span>
+              <span className="text-xs sm:text-sm font-medium">
+                {Math.round((round / 10) * 100)}%
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5">
+              <div
+                className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 sm:h-2.5 rounded-full transition-all duration-300"
+                style={{
+                  width: `${(round / 10) * 100}%`,
+                }}
+              ></div>
+            </div>
           </div>
         </div>
       )}

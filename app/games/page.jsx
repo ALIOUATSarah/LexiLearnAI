@@ -66,7 +66,7 @@ export default function GamesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50">
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
               <span className="text-white font-bold">L</span>
@@ -74,17 +74,17 @@ export default function GamesPage() {
             <h1 className="text-xl font-bold">LexiLearn AI</h1>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="outline"
-              className="border-blue-300 text-blue-600 hidden sm:flex"
+              className="border-blue-300 text-blue-600 text-xs sm:text-sm"
               asChild
             >
               <Link href="/lessons">Back to Lessons</Link>
             </Button>
             <Button
               variant="outline"
-              className="border-purple-300 text-purple-600"
+              className="border-purple-300 text-purple-600 text-xs sm:text-sm"
               asChild
             >
               <Link href="/student-dashboard">View Dashboard</Link>
@@ -106,7 +106,7 @@ export default function GamesPage() {
           </div>
 
           {!activeGame ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {games.map((game, index) => (
                 <Card
                   key={game.id}
@@ -133,7 +133,7 @@ export default function GamesPage() {
                         : index % 5 === 3
                         ? "bg-amber-100 border-b border-amber-200"
                         : "bg-rose-100 border-b border-rose-200"
-                    }`}
+                    } p-4`}
                   >
                     <CardTitle
                       className={`${
@@ -146,11 +146,13 @@ export default function GamesPage() {
                           : index % 5 === 3
                           ? "text-amber-700"
                           : "text-rose-700"
-                      }`}
+                      } text-lg sm:text-xl`}
                     >
                       {game.title}
                     </CardTitle>
-                    <CardDescription>{game.description}</CardDescription>
+                    <CardDescription className="text-sm">
+                      {game.description}
+                    </CardDescription>
                   </CardHeader>
                   <CardFooter className="flex justify-center p-4">
                     <Button
@@ -175,13 +177,13 @@ export default function GamesPage() {
             </div>
           ) : (
             <div>
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+              <div className="mb-4 flex flex-wrap justify-between items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                   {games.find((g) => g.id === activeGame)?.title}
                 </h2>
                 <Button
                   variant="outline"
-                  className="border-blue-300 text-blue-600"
+                  className="border-blue-300 text-blue-600 text-xs sm:text-sm"
                   onClick={() => setActiveGame(null)}
                 >
                   Back to Games
@@ -190,7 +192,7 @@ export default function GamesPage() {
 
               <Card className="border-2 border-blue-400 overflow-hidden">
                 <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-600"></div>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   {activeGame === "memory" && (
                     <GameMemory courseTopic={courseTopic} />
                   )}
