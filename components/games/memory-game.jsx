@@ -264,7 +264,7 @@ export function GameMemory({ courseTopic }) {
   }, [difficulty]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
       {!gameStarted ? (
         <div className="text-center p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
           <h2 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
@@ -326,88 +326,118 @@ export function GameMemory({ courseTopic }) {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-            <div className="flex flex-wrap gap-2">
-              <div className="stat-item py-1 px-3 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm">
-                Moves: {moves}
+          <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div className="space-y-1">
+              <div className="flex gap-4">
+                <p className="text-sm font-medium">
+                  Moves:{" "}
+                  <span className="text-blue-600 font-bold">{moves}</span>
+                </p>
+                <p className="text-sm font-medium">
+                  Time:{" "}
+                  <span className="text-purple-600 font-bold">
+                    {formatTime(gameTime)}
+                  </span>
+                </p>
               </div>
-              <div className="stat-item py-1 px-3 bg-purple-100 text-purple-800 rounded-full text-xs sm:text-sm">
-                Pairs: {matchedPairs}/{cards.length / 2}
-              </div>
-              <div className="stat-item py-1 px-3 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm">
-                Time: {formatTime(gameTime)}
+              <p className="text-sm font-medium">
+                Pairs Found:{" "}
+                <span className="text-green-600 font-bold">{matchedPairs}</span>{" "}
+                / <span className="text-gray-600">{cards.length / 2}</span>
+              </p>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  className="bg-gradient-to-r from-green-400 to-blue-500 h-2.5 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(matchedPairs / (cards.length / 2)) * 100}%`,
+                  }}
+                ></div>
               </div>
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-red-300 text-red-600 text-xs sm:text-sm"
-              onClick={() => {
-                setGameStarted(false);
-                setTimerActive(false);
-              }}
-            >
-              Restart
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                size="sm"
+                onClick={initializeGame}
+              >
+                New Game
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setGameStarted(false);
+                  setTimerActive(false);
+                }}
+              >
+                Change Difficulty
+              </Button>
+            </div>
           </div>
 
-          {!gameComplete ? (
-            <div
-              className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4`}
-            >
-              {cards.map((card) => (
-                <div
-                  key={card.id}
-                  className="perspective-500 cursor-pointer"
-                  onClick={() => handleCardClick(card.id)}
-                >
+          <div
+            className={`grid ${
+              difficulty === "easy"
+                ? "grid-cols-2 md:grid-cols-4"
+                : difficulty === "medium"
+                ? "grid-cols-3 md:grid-cols-4"
+                : "grid-cols-4"
+            } gap-3`}
+          >
+            {cards.map((card) => (
+              <div
+                key={card.id}
+                className={`aspect-square cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+                  card.flipped || card.matched ? "rotate-y-180" : ""
+                } ${card.matched ? "opacity-70" : ""}`}
+                onClick={() => handleCardClick(card.id)}
+              >
+                <div className="relative w-full h-full preserve-3d">
                   <div
-                    className={`relative transition duration-500 preserve-3d w-full aspect-square ${
-                      card.flipped || card.matched ? "rotate-y-180" : ""
+                    className={`absolute w-full h-full backface-hidden ${
+                      card.flipped || card.matched ? "opacity-0" : "opacity-100"
                     }`}
                   >
-                    <div className="absolute w-full h-full backface-hidden">
-                      <Card className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-base sm:text-xl border-2 border-blue-600 shadow-md">
-                        ?
-                      </Card>
-                    </div>
-                    <div
-                      className={`absolute w-full h-full rotate-y-180 backface-hidden ${
-                        card.flipped || card.matched
-                          ? "opacity-100"
-                          : "opacity-0"
+                    <Card className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl border-2 border-blue-600 shadow-md">
+                      ?
+                    </Card>
+                  </div>
+                  <div
+                    className={`absolute w-full h-full rotate-y-180 backface-hidden ${
+                      card.flipped || card.matched ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <Card
+                      className={`w-full h-full flex items-center justify-center text-center p-2 border-2 ${
+                        card.matched
+                          ? "bg-green-100 border-green-500 shadow-md"
+                          : "bg-white border-blue-400 shadow-md"
                       }`}
                     >
-                      <Card
-                        className={`w-full h-full flex items-center justify-center text-center p-1 sm:p-2 border-2 ${
-                          card.matched
-                            ? "bg-green-100 border-green-500 shadow-md"
-                            : "bg-white border-blue-400 shadow-md"
+                      <span
+                        className={`font-medium text-lg ${
+                          card.matched ? "text-green-700" : "text-blue-700"
                         }`}
                       >
-                        <span
-                          className={`font-medium text-xs sm:text-sm md:text-base ${
-                            card.matched ? "text-green-700" : "text-blue-700"
-                          }`}
-                        >
-                          {card.content}
-                        </span>
-                      </Card>
-                    </div>
+                        {card.content}
+                      </span>
+                    </Card>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center p-4 sm:p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-md border border-green-300 shadow-md">
-              <h3 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-3">
+              </div>
+            ))}
+          </div>
+
+          {gameComplete && (
+            <div className="text-center p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-md border border-green-300 shadow-md">
+              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-3">
                 Congratulations!
               </h3>
               <div className="mb-4">
-                <div className="text-2xl sm:text-4xl font-bold text-blue-600 mb-2">
+                <div className="text-4xl font-bold text-blue-600 mb-2">
                   {calculateScore()}
                 </div>
-                <p className="text-sm sm:text-lg">
+                <p className="text-lg">
                   You completed the game in{" "}
                   <span className="font-bold text-blue-600">{moves}</span> moves
                   and{" "}
@@ -418,37 +448,33 @@ export function GameMemory({ courseTopic }) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                <div className="bg-blue-50 p-2 sm:p-3 rounded-lg border border-blue-200">
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                   <div className="text-blue-600 font-bold">{moves}</div>
-                  <div className="text-blue-500 text-xs sm:text-sm">Moves</div>
+                  <div className="text-blue-500 text-sm">Moves</div>
                 </div>
-                <div className="bg-purple-50 p-2 sm:p-3 rounded-lg border border-purple-200">
+                <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
                   <div className="text-purple-600 font-bold">
                     {formatTime(gameTime)}
                   </div>
-                  <div className="text-purple-500 text-xs sm:text-sm">Time</div>
+                  <div className="text-purple-500 text-sm">Time</div>
                 </div>
-                <div className="bg-green-50 p-2 sm:p-3 rounded-lg border border-green-200">
+                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
                   <div className="text-green-600 font-bold">{difficulty}</div>
-                  <div className="text-green-500 text-xs sm:text-sm">
-                    Difficulty
-                  </div>
+                  <div className="text-green-500 text-sm">Difficulty</div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              <div className="flex justify-center gap-3">
                 <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-xs sm:text-sm w-full sm:w-auto"
+                  className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
                   onClick={initializeGame}
                 >
                   Play Again
                 </Button>
                 <Button
-                  size="sm"
                   variant="outline"
-                  className="border-blue-300 text-blue-600 text-xs sm:text-sm w-full sm:w-auto"
+                  className="border-blue-300 text-blue-600"
                   onClick={() => {
                     setGameStarted(false);
                     setTimerActive(false);

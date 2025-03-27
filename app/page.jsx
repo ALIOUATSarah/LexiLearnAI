@@ -534,11 +534,11 @@ export default function Home() {
                   <div className="flex items-center mb-4">
                     <div className="mr-4">
                       <div className="w-12 h-12 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-700 font-bold">
-                        JD
+                        YST
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Jamie D.</h4>
+                      <h4 className="font-semibold text-gray-900">Younes .</h4>
                       <p className="text-sm text-gray-500">
                         10th Grade Student
                       </p>

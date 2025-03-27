@@ -362,145 +362,145 @@ export function GameFlashcards({ courseTopic = "default" }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="w-full max-w-3xl mx-auto">
       {!isFinished ? (
-        <div>
-          <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-            <div className="flex flex-wrap gap-2">
-              <div className="bg-blue-100 text-blue-800 text-xs sm:text-sm px-3 py-1 rounded-full">
+        <div className="space-y-6">
+          {/* Header section */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <Badge
+                className={`px-3 py-1 ${
+                  mode === "learn"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-purple-100 text-purple-700"
+                }`}
+              >
+                {mode === "learn" ? (
+                  <>
+                    <BookOpen className="w-4 h-4 mr-1" /> Learning Mode
+                  </>
+                ) : (
+                  <>
+                    <Repeat className="w-4 h-4 mr-1" /> Review Mode
+                  </>
+                )}
+              </Badge>
+
+              <span className="text-sm font-medium text-gray-500">
                 Card {currentCardIndex + 1} of {cards.length}
-              </div>
-              <div className="bg-purple-100 text-purple-800 text-xs sm:text-sm px-3 py-1 rounded-full">
-                Mastered: {knownCards.length} of {cards.length}
-              </div>
-            </div>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-red-300 text-red-600 text-xs sm:text-sm"
-              onClick={resetCards}
-            >
-              Reset
-            </Button>
-          </div>
-
-          <div
-            className="bg-white rounded-xl shadow-lg border-2 border-blue-300 overflow-hidden relative mb-4 cursor-pointer"
-            style={{ height: "280px" }}
-            onClick={flipCard}
-          >
-            <div className="absolute inset-0 p-4 sm:p-6 flex flex-col items-center justify-center text-center">
-              {isFlipped ? (
-                <>
-                  <div className="text-purple-600 text-xs sm:text-sm mb-2">
-                    DEFINITION
-                  </div>
-                  <div className="text-base sm:text-lg md:text-xl font-medium text-gray-800 mb-4">
-                    {cards[currentCardIndex]?.back}
-                  </div>
-                  <div className="text-gray-600 text-xs sm:text-sm border-t border-gray-200 pt-4 mt-2">
-                    <div className="font-medium mb-1">Click to flip back</div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="text-blue-600 text-xs sm:text-sm mb-2">
-                    TERM
-                  </div>
-                  <div className="text-base sm:text-lg md:text-xl font-medium text-gray-800">
-                    {cards[currentCardIndex]?.front}
-                  </div>
-                  <div className="absolute bottom-2 sm:bottom-4 text-gray-400 text-xs sm:text-sm">
-                    Tap to flip card
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="space-y-2">
-              <p className="text-xs sm:text-sm text-gray-600 text-center">
-                How well did you know this?
-              </p>
-              <div className="grid grid-cols-3 gap-1 sm:gap-2">
-                <Button
-                  variant="outline"
-                  className={`border-red-300 hover:bg-red-50 text-xs sm:text-sm p-1 sm:p-2 ${
-                    knownCards.length === 0 ? "bg-red-100 border-red-400" : ""
-                  }`}
-                  onClick={markAsUnknown}
-                >
-                  Hard
-                </Button>
-                <Button
-                  variant="outline"
-                  className={`border-amber-300 hover:bg-amber-50 text-xs sm:text-sm p-1 sm:p-2 ${
-                    knownCards.length === 1
-                      ? "bg-amber-100 border-amber-400"
-                      : ""
-                  }`}
-                  onClick={markAsUnknown}
-                >
-                  Medium
-                </Button>
-                <Button
-                  variant="outline"
-                  className={`border-green-300 hover:bg-green-50 text-xs sm:text-sm p-1 sm:p-2 ${
-                    knownCards.length === 2
-                      ? "bg-green-100 border-green-400"
-                      : ""
-                  }`}
-                  onClick={markAsKnown}
-                >
-                  Easy
-                </Button>
-              </div>
+              </span>
             </div>
 
-            <Button
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 h-full"
-              onClick={nextCard}
-              disabled={knownCards.length === 3}
-            >
-              Next Card
-            </Button>
+            <div>
+              <Badge className="bg-green-100 text-green-700 px-3 py-1">
+                <Check className="w-4 h-4 mr-1" />
+                {knownCards.length} Known
+              </Badge>
+            </div>
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs sm:text-sm text-gray-600">
-                Overall Progress
-              </span>
-              <span className="text-xs sm:text-sm font-medium">
-                {Math.round((knownCards.length / cards.length) * 100)}% Mastered
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5">
+          <Progress
+            value={((currentCardIndex + 1) / cards.length) * 100}
+            className="h-2 bg-gray-100"
+            indicatorClassName={`${
+              mode === "learn" ? "bg-blue-500" : "bg-purple-500"
+            }`}
+          />
+
+          {/* Flashcard */}
+          <div
+            className={`
+              relative w-full h-[300px] perspective-1000 cursor-pointer 
+              transition-transform transform hover:scale-[1.01]
+            `}
+            onClick={flipCard}
+          >
+            <div
+              className={`
+                absolute w-full h-full transition-all duration-500 transform preserve-3d
+                ${isFlipped ? "rotate-y-180" : ""}
+              `}
+            >
+              {/* Front of card */}
               <div
-                className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 sm:h-2.5 rounded-full"
-                style={{
-                  width: `${(knownCards.length / cards.length) * 100}%`,
-                }}
-              ></div>
+                className={`
+                  absolute w-full h-full backface-hidden rounded-xl p-6
+                  flex items-center justify-center bg-white border-2 
+                  ${mode === "learn" ? "border-blue-300" : "border-purple-300"}
+                  shadow-lg text-center
+                `}
+              >
+                <div>
+                  <div className="text-sm text-gray-500 mb-3">TERM</div>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {cards[currentCardIndex]?.front}
+                  </h2>
+                  <div className="mt-6 text-sm text-blue-500">
+                    Click to flip
+                  </div>
+                </div>
+              </div>
+
+              {/* Back of card */}
+              <div
+                className={`
+                  absolute w-full h-full backface-hidden rounded-xl p-6
+                  flex items-center justify-center bg-white border-2 
+                  ${mode === "learn" ? "border-blue-300" : "border-purple-300"}
+                  shadow-lg text-center rotate-y-180 overflow-auto
+                `}
+              >
+                <div>
+                  <div className="text-sm text-gray-500 mb-3">DEFINITION</div>
+                  <p className="text-gray-800 text-lg">
+                    {cards[currentCardIndex]?.back}
+                  </p>
+                  <div className="mt-6 text-sm text-blue-500">
+                    Click to flip back
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Mastery indicators */}
-          <div className="flex flex-wrap gap-1 mt-4">
-            {cards.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
-                  knownCards.includes(index)
-                    ? "bg-green-500"
-                    : index === currentCardIndex
-                    ? "bg-blue-500"
-                    : "bg-gray-300"
-                }`}
-              ></div>
-            ))}
+          {/* Controls */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+            <Button
+              variant="outline"
+              className="border-gray-300 w-full sm:w-auto"
+              onClick={prevCard}
+              disabled={currentCardIndex === 0}
+            >
+              <ArrowLeft className="w-4 h-4 mr-1" /> Previous
+            </Button>
+
+            <div className="flex space-x-2 w-full sm:w-auto">
+              <Button
+                className="bg-red-500 hover:bg-red-600 text-white flex-1 sm:flex-initial"
+                onClick={markAsUnknown}
+              >
+                <X className="w-4 h-4 mr-1" /> Still Learning
+              </Button>
+
+              <Button
+                className="bg-green-500 hover:bg-green-600 text-white flex-1 sm:flex-initial"
+                onClick={markAsKnown}
+              >
+                <Check className="w-4 h-4 mr-1" /> Know It
+              </Button>
+            </div>
+
+            <Button
+              variant="outline"
+              className="border-gray-300 w-full sm:w-auto"
+              onClick={nextCard}
+              disabled={
+                currentCardIndex === cards.length - 1 && mode === "review"
+              }
+            >
+              Next <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
           </div>
         </div>
       ) : (

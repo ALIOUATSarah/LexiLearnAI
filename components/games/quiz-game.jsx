@@ -319,7 +319,7 @@ export function GameQuiz({ courseTopic }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {!gameActive && !gameOver ? (
         <div className="text-center p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
           <h2 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
@@ -363,48 +363,44 @@ export function GameQuiz({ courseTopic }) {
           </Button>
         </div>
       ) : gameOver ? (
-        <div className="text-center p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 shadow-md">
-          <h3 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
-            Quiz Complete!
-          </h3>
+        <div className="text-center p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-300 shadow-lg">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+            Game Over!
+          </h2>
+          <p className="text-xl mb-6">
+            Your final score:{" "}
+            <span className="font-bold text-blue-600">{score}</span> points
+          </p>
+
+          <div className="w-48 h-48 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-inner mb-6 animate-pulse">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                {score}
+              </div>
+              <div className="text-blue-600 font-medium">Points</div>
+            </div>
+          </div>
 
           <div className="mb-6">
-            <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
-              {score} points
-            </div>
-            <p className="text-gray-600">
-              You got{" "}
-              <span className="font-bold text-green-600">{correctAnswers}</span>{" "}
-              out of{" "}
-              <span className="font-bold text-blue-600">
-                {questions.length}
-              </span>{" "}
-              questions correct!
-            </p>
+            {score > 75 ? (
+              <p className="text-green-600 font-medium text-lg bg-green-50 p-3 rounded-md border border-green-200 inline-block">
+                Amazing! You're a {courseTopic || "subject"} genius! 🏆
+              </p>
+            ) : score > 50 ? (
+              <p className="text-blue-600 font-medium text-lg bg-blue-50 p-3 rounded-md border border-blue-200 inline-block">
+                Great job! You know your {courseTopic || "subject"} well! 🎓
+              </p>
+            ) : (
+              <p className="text-purple-600 font-medium text-lg bg-purple-50 p-3 rounded-md border border-purple-200 inline-block">
+                Good effort! Keep practicing to improve! 💪
+              </p>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-              <div className="text-blue-600 font-bold">{correctAnswers}</div>
-              <div className="text-blue-500 text-xs sm:text-sm">Correct</div>
-            </div>
-            <div className="bg-amber-50 p-3 rounded-lg border border-amber-200">
-              <div className="text-amber-600 font-bold">
-                {averageTime.toFixed(1)}s
-              </div>
-              <div className="text-amber-500 text-xs sm:text-sm">Avg. Time</div>
-            </div>
-            <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-              <div className="text-purple-600 font-bold">{streak}</div>
-              <div className="text-purple-500 text-xs sm:text-sm">
-                Best Streak
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex gap-4 justify-center">
             <Button
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 w-full sm:w-auto"
+              size="lg"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-8"
               onClick={startGame}
             >
               Play Again
@@ -412,7 +408,8 @@ export function GameQuiz({ courseTopic }) {
 
             <Button
               variant="outline"
-              className="border-blue-300 text-blue-600 w-full sm:w-auto"
+              size="lg"
+              className="border-blue-300 text-blue-600 px-8"
               onClick={() => window.history.back()}
             >
               Go Back
@@ -421,18 +418,18 @@ export function GameQuiz({ courseTopic }) {
         </div>
       ) : (
         <div>
-          <div className="flex flex-wrap justify-between items-center mb-4 gap-2 bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-200">
-            <div className="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+          <div className="flex justify-between items-center mb-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
               Score: {score}
             </div>
-            <div className="text-xs sm:text-sm font-medium bg-white px-3 py-1 rounded-full border border-blue-200">
+            <div className="text-sm font-medium bg-white px-3 py-1 rounded-full border border-blue-200">
               Question {currentQuestion + 1} of {questions.length}
             </div>
           </div>
 
           <div className="mb-4">
             <div className="flex justify-between items-center mb-1">
-              <span className="text-xs sm:text-sm font-medium">
+              <span className="text-sm font-medium">
                 Time Left:{" "}
                 <span
                   className={`font-bold ${
@@ -447,7 +444,7 @@ export function GameQuiz({ courseTopic }) {
                 </span>
               </span>
               <span
-                className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full ${
+                className={`text-sm font-medium px-2 py-1 rounded-full ${
                   timeLeft > 7
                     ? "bg-green-100 text-green-700"
                     : timeLeft > 3
@@ -464,7 +461,7 @@ export function GameQuiz({ courseTopic }) {
             </div>
             <Progress
               value={(timeLeft / 10) * 100}
-              className="h-2 sm:h-3"
+              className="h-3"
               indicatorClassName={`${
                 timeLeft > 7
                   ? "bg-gradient-to-r from-green-400 to-green-600"
@@ -475,14 +472,14 @@ export function GameQuiz({ courseTopic }) {
             />
           </div>
 
-          <Card className="border-2 border-blue-400 mb-4 sm:mb-6 overflow-hidden shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-blue-100 to-purple-100 border-b border-blue-200 p-3 sm:p-4">
-              <CardTitle className="text-center text-blue-800 text-sm sm:text-base md:text-lg">
+          <Card className="border-2 border-blue-400 mb-6 overflow-hidden shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-100 to-purple-100 border-b border-blue-200">
+              <CardTitle className="text-center text-blue-800">
                 {questions[currentQuestion]?.question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-3 sm:p-4 md:p-6 bg-gradient-to-b from-blue-50 to-white">
-              <div className="grid grid-cols-1 gap-2 sm:gap-3">
+            <CardContent className="p-6 bg-gradient-to-b from-blue-50 to-white">
+              <div className="grid grid-cols-1 gap-3 mt-2">
                 {questions[currentQuestion]?.options.map((option, index) => {
                   const isCorrectAnswer =
                     index === questions[currentQuestion]?.correctAnswer;
@@ -492,7 +489,7 @@ export function GameQuiz({ courseTopic }) {
                     <Button
                       key={index}
                       variant="outline"
-                      className={`justify-start text-left h-auto py-3 text-xs sm:text-sm border-2 
+                      className={`justify-start text-left h-auto py-4 border-2 
                         ${
                           isSelected
                             ? "border-blue-500 bg-blue-50 shadow-md"
@@ -515,7 +512,7 @@ export function GameQuiz({ courseTopic }) {
                       disabled={selectedOption !== null}
                     >
                       <div
-                        className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full mr-2 sm:mr-3 flex items-center justify-center text-xs sm:text-sm
+                        className={`w-8 h-8 rounded-full mr-3 flex items-center justify-center 
                           ${
                             isSelected
                               ? "bg-blue-500 text-white"
@@ -536,22 +533,19 @@ export function GameQuiz({ courseTopic }) {
                       >
                         {String.fromCharCode(65 + index)}
                       </div>
-                      <span className="flex-1">{option}</span>
+                      {option}
 
                       {/* Show correct/incorrect indicators after selection */}
                       {selectedOption !== null && isCorrectAnswer && (
                         <CheckCircle2
-                          className="ml-auto text-green-500 flex-shrink-0"
-                          size={16}
+                          className="ml-auto text-green-500"
+                          size={20}
                         />
                       )}
                       {selectedOption !== null &&
                         isSelected &&
                         !isCorrectAnswer && (
-                          <XCircle
-                            className="ml-auto text-red-500 flex-shrink-0"
-                            size={16}
-                          />
+                          <XCircle className="ml-auto text-red-500" size={20} />
                         )}
                     </Button>
                   );
