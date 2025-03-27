@@ -26,14 +26,24 @@ export const metadata = {
     title: "LexiLearn AI",
     description: "An intelligent learning platform designed for every student",
   },
+  other: {
+    "theme-color": "#6366F1",
+    "msapplication-TileColor": "#6366F1",
+    "msapplication-config": "/logo.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="LexiLearn AI" />
         <meta name="twitter:image:alt" content="LexiLearn AI" />
+        <meta name="twitter:card:player" content="summary_large_image" />
+        <meta property="og:image:type" content="image/png" />
+        <meta name="robots" content="max-image-preview:large" />
       </head>
       <body className={inter.className}>
         {children}

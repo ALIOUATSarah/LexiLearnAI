@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+export const runtime = "edge";
 export const alt = "LexiLearn AI";
 export const size = {
   width: 1200,
@@ -19,38 +20,24 @@ export default async function Image() {
           width: "100%",
           height: "100%",
           background: "linear-gradient(to bottom right, #6366F1, #A78BFA)",
+          padding: "40px 60px",
         }}
       >
         <div
           style={{
             display: "flex",
-            fontSize: 60,
-            fontStyle: "normal",
-            letterSpacing: "-0.025em",
-            color: "white",
-            marginTop: 30,
-            padding: "0 120px",
-            lineHeight: 1.4,
-            whiteSpace: "pre-wrap",
-            textAlign: "center",
-          }}
-        >
-          LexiLearn AI
-        </div>
-        <div
-          style={{
-            display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 300,
-            height: 300,
+            width: 400,
+            height: 400,
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            borderRadius: "50%",
             border: "15px solid white",
-            borderRadius: 150,
-            backgroundColor: "white",
-            marginTop: 30,
+            boxShadow: "0 0 50px rgba(0, 0, 0, 0.15)",
+            marginBottom: 40,
           }}
         >
-          <svg width="270" height="270" viewBox="0 0 24 24" fill="none">
+          <svg width="300" height="300" viewBox="0 0 24 24" fill="none">
             <defs>
               <linearGradient
                 id="logoGradient"
@@ -172,16 +159,37 @@ export default async function Image() {
         </div>
         <div
           style={{
-            display: "flex",
-            fontSize: 24,
-            fontStyle: "normal",
+            fontSize: 72,
+            fontWeight: "bold",
+            lineHeight: 1.2,
             color: "white",
-            marginTop: 20,
-            padding: "0 120px",
             textAlign: "center",
+            textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+            marginBottom: 20,
           }}
         >
-          An intelligent learning platform designed for every student
+          LexiLearn AI
+        </div>
+        <div
+          style={{
+            fontSize: 32,
+            color: "white",
+            opacity: 0.95,
+            textAlign: "center",
+            maxWidth: "80%",
+          }}
+        >
+          Education That Adapts to Every Mind
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 30,
+            fontSize: 24,
+            color: "rgba(255,255,255,0.8)",
+          }}
+        >
+          younes-lexilearn.vercel.app
         </div>
       </div>
     ),
