@@ -109,6 +109,18 @@ export default function CoursePage() {
       background: "blue",
       text: "gray-800",
     },
+    adaptive: {
+      background: "indigo",
+      text: "gray-800",
+    },
+  });
+  const [sensitivityProfile, setSensitivityProfile] = useState({
+    textPatterns: false,
+    animation: false,
+    contrast: false,
+    wordSpacing: false,
+    fontWeight: false,
+    wordReplacement: false,
   });
   const contentRef = useRef(null);
   const focusModeButtonRef = useRef(null);
@@ -134,6 +146,9 @@ export default function CoursePage() {
     } else if (mode === "adhd") {
       const bg = colorTheme.adhd.background;
       return `adhd-mode bg-${bg}-50 adhd-focus`;
+    } else if (mode === "adaptive") {
+      const bg = colorTheme.adaptive.background;
+      return `adaptive-mode bg-${bg}-50 adaptive-sensory`;
     } else {
       return "normal-mode";
     }
@@ -142,6 +157,236 @@ export default function CoursePage() {
   // Define speakText function before the useEffect hook
   const speakText = (text) => {
     speak(text, mode === "dyslexia" ? 0.9 : 1);
+  };
+
+  // Add pattern detection function for adaptive mode
+  const detectPatterns = (text) => {
+    if (mode !== "adaptive") return text;
+
+    try {
+      // Create a temporary div to sanitize the input first
+      const tempDiv = document.createElement("div");
+      tempDiv.textContent = text; // This safely escapes any HTML in the text
+      const sanitizedText = tempDiv.textContent;
+
+      // More sophisticated pattern detection logic
+      const complexPatterns = [
+        /([a-z]{3,})ing\b/gi, // Words ending with 'ing'
+        /\b([a-z]{3,})tion\b/gi, // Words ending with 'tion'
+        /\b([a-z]{2,})([a-z]{2,})\2([a-z]*)\b/gi, // Words with repeated letter patterns
+        /\b([a-z]{4,})\b/gi, // Longer words
+        /\b(simultaneous|characteristic|phenomenon|consequently|extraordinary|nevertheless|approximately|immediately|particularly|representation|circumstances|substantially|effectiveness|comprehensive|significantly|approximately|coordination|inappropriate|unfortunately|underestimated)\b/gi, // Specifically difficult words
+        /\b([a-z]{3,}ph[a-z]{2,})\b/gi, // Words with 'ph' combination
+        /\b([a-z]*[aeiou]{3,}[a-z]*)\b/gi, // Words with 3+ consecutive vowels
+        /\b([a-z]*th[aeiou][a-z]*)\b/gi, // Words with 'th' followed by a vowel
+        /\b([bcdfghjklmnpqrstvwxyz]{3,}[aeiou])/gi, // Words starting with 3+ consonants
+      ];
+
+      // Create a map of difficult words and simpler alternatives
+      const wordReplacements = {
+        subsequently: "later",
+        consequently: "so",
+        nevertheless: "still",
+        approximately: "about",
+        immediately: "now",
+        particularly: "especially",
+        representation: "image",
+        circumstances: "conditions",
+        substantially: "greatly",
+        effectiveness: "success",
+        comprehensive: "complete",
+        significantly: "greatly",
+        coordination: "connection",
+        inappropriate: "wrong",
+        unfortunately: "sadly",
+        underestimated: "missed",
+        phenomenon: "event",
+        sufficient: "enough",
+        facilitate: "help",
+        fundamental: "basic",
+        demonstrate: "show",
+        essentially: "basically",
+        perspective: "view",
+        preliminary: "early",
+        comparable: "similar",
+        eventually: "finally",
+      };
+
+      // Safer approach - work with string segments to avoid double processing
+      let result = sanitizedText;
+      let segments = [{ text: result, isHighlighted: false }];
+      let newSegments = [];
+
+      // First apply word replacements
+      if (sensitivityProfile.wordReplacement) {
+        for (const [difficult, simple] of Object.entries(wordReplacements)) {
+          newSegments = [];
+          const regex = new RegExp(`\\b${difficult}\\b`, "gi");
+
+          for (const segment of segments) {
+            if (segment.isHighlighted) {
+              newSegments.push(segment); // Don't process already highlighted segments
+              continue;
+            }
+
+            let lastIndex = 0;
+            let match;
+            let segmentText = segment.text;
+
+            while ((match = regex.exec(segmentText)) !== null) {
+              // Add text before the match
+              if (match.index > lastIndex) {
+                newSegments.push({
+                  text: segmentText.substring(lastIndex, match.index),
+                  isHighlighted: false,
+                });
+              }
+
+              // Add the replaced word
+              newSegments.push({
+                text: `<span class="replaced-word" title="Original: ${difficult}">${simple}</span>`,
+                isHighlighted: true,
+              });
+
+              lastIndex = regex.lastIndex;
+            }
+
+            // Add the remaining text
+            if (lastIndex < segmentText.length) {
+              newSegments.push({
+                text: segmentText.substring(lastIndex),
+                isHighlighted: false,
+              });
+            }
+          }
+
+          segments = newSegments;
+        }
+      }
+
+      // Then apply pattern highlighting
+      if (sensitivityProfile.textPatterns) {
+        for (const pattern of complexPatterns) {
+          newSegments = [];
+
+          for (const segment of segments) {
+            if (segment.isHighlighted) {
+              newSegments.push(segment); // Don't process already highlighted segments
+              continue;
+            }
+
+            let lastIndex = 0;
+            let match;
+            let segmentText = segment.text;
+            pattern.lastIndex = 0; // Reset regex state
+
+            while ((match = pattern.exec(segmentText)) !== null) {
+              // Add text before the match
+              if (match.index > lastIndex) {
+                newSegments.push({
+                  text: segmentText.substring(lastIndex, match.index),
+                  isHighlighted: false,
+                });
+              }
+
+              // Add the highlighted pattern
+              newSegments.push({
+                text: `<span class="pattern-detected">${match[0]}</span>`,
+                isHighlighted: true,
+              });
+
+              lastIndex = pattern.lastIndex;
+            }
+
+            // Add the remaining text
+            if (lastIndex < segmentText.length) {
+              newSegments.push({
+                text: segmentText.substring(lastIndex),
+                isHighlighted: false,
+              });
+            }
+          }
+
+          segments = newSegments;
+        }
+      }
+
+      // Combine all segments back into a single string
+      result = segments.map((segment) => segment.text).join("");
+
+      return result;
+    } catch (err) {
+      console.error("Error in pattern detection:", err);
+      return text; // Return original text if there's an error
+    }
+  };
+
+  // Add function to apply sensory break
+  const applySensoryBreak = () => {
+    // Simplified version that removes detected patterns temporarily
+    const patterns = document.querySelectorAll(".pattern-detected");
+    patterns.forEach((el) => {
+      el.classList.remove("pattern-detected");
+    });
+
+    // Apply reduced contrast
+    document
+      .querySelector(".adaptive-sensory")
+      ?.classList.add("reduced-contrast");
+
+    // After 10 seconds, restore normal state
+    setTimeout(() => {
+      document
+        .querySelector(".adaptive-sensory")
+        ?.classList.remove("reduced-contrast");
+    }, 10000);
+  };
+
+  // Update sensitivity profile
+  const updateSensitivityProfile = (key, value) => {
+    setSensitivityProfile((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+
+    // Apply appropriate CSS variables or classes
+    const root = document.documentElement;
+
+    if (key === "wordSpacing") {
+      if (value) {
+        document
+          .querySelector(".adaptive-sensory")
+          ?.classList.add("custom-word-spacing");
+        root.style.setProperty("--word-spacing", "0.2em");
+      } else {
+        document
+          .querySelector(".adaptive-sensory")
+          ?.classList.remove("custom-word-spacing");
+      }
+    }
+
+    if (key === "fontWeight") {
+      if (value) {
+        document
+          .querySelector(".adaptive-sensory")
+          ?.classList.add("custom-weight");
+        root.style.setProperty("--font-weight", "500");
+      } else {
+        document
+          .querySelector(".adaptive-sensory")
+          ?.classList.remove("custom-weight");
+      }
+    }
+
+    if (key === "contrast" && value) {
+      document
+        .querySelector(".adaptive-sensory")
+        ?.classList.add("reduced-contrast");
+    } else if (key === "contrast" && !value) {
+      document
+        .querySelector(".adaptive-sensory")
+        ?.classList.remove("reduced-contrast");
+    }
   };
 
   // Course data (would come from API in a real app)
@@ -679,17 +924,22 @@ export default function CoursePage() {
   // Updated dependency array for this useEffect
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Alt + D for Dyslexia Mode
-      if (e.altKey && e.key === "d") {
+      // Handle keyboard shortcuts
+      if (e.key === "d" && e.ctrlKey) {
+        e.preventDefault();
         setMode("dyslexia");
-      }
-      // Alt + A for ADHD Mode
-      else if (e.altKey && e.key === "a") {
+      } else if (e.key === "a" && e.ctrlKey) {
+        e.preventDefault();
         setMode("adhd");
-      }
-      // Alt + N for Normal Mode
-      else if (e.altKey && e.key === "n") {
+      } else if (e.key === "n" && e.ctrlKey) {
+        e.preventDefault();
         setMode("normal");
+      } else if (e.key === "p" && e.ctrlKey) {
+        e.preventDefault();
+        setMode("adaptive");
+      } else if (e.key === "f" && e.ctrlKey) {
+        e.preventDefault();
+        toggleFocusMode();
       }
 
       // Dyslexia-specific shortcuts
@@ -1128,6 +1378,81 @@ export default function CoursePage() {
           transition: all 0.2s ease-in-out;
         }
 
+        /* Adaptive Mode Styles */
+        .adaptive-sensory .adaptive-control {
+          position: fixed;
+          right: 20px;
+          top: 100px;
+          background: white;
+          border-radius: 8px;
+          padding: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          z-index: 50;
+          border: 2px solid #4f46e5;
+        }
+
+        .adaptive-sensory .adaptive-slider {
+          width: 100%;
+          margin: 8px 0;
+        }
+
+        .adaptive-sensory .sensory-break-button {
+          position: fixed;
+          right: 20px;
+          bottom: 100px;
+          background: #4f46e5;
+          color: white;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          z-index: 50;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .adaptive-sensory .sensory-break-button:hover {
+          transform: scale(1.1);
+          background: #4338ca;
+        }
+
+        .adaptive-sensory .pattern-detected {
+          position: relative;
+          background-color: rgba(79, 70, 229, 0.1);
+          border-radius: 4px;
+          padding: 0 2px;
+          border-bottom: 2px dotted #4f46e5;
+          display: inline-block;
+        }
+
+        .adaptive-sensory .replaced-word {
+          background-color: rgba(79, 70, 229, 0.08);
+          border-radius: 4px;
+          padding: 0 2px;
+          border-bottom: 1px solid #4f46e5;
+          color: #4f46e5;
+          font-weight: 500;
+          cursor: help;
+          display: inline-block;
+        }
+
+        .adaptive-sensory.reduced-contrast {
+          filter: contrast(0.9);
+        }
+
+        .adaptive-sensory.custom-word-spacing p,
+        .adaptive-sensory.custom-word-spacing li {
+          word-spacing: var(--word-spacing, 0.2em);
+        }
+
+        .adaptive-sensory.custom-weight p,
+        .adaptive-sensory.custom-weight li {
+          font-weight: var(--font-weight, 400);
+        }
+
         /* Focus Mode Styles */
         .focus-mode .main-content {
           max-width: 800px;
@@ -1145,6 +1470,10 @@ export default function CoursePage() {
 
         .focus-mode.adhd-mode .main-content {
           background: #eff6ff; /* blue-50 */
+        }
+
+        .focus-mode.adaptive-mode .main-content {
+          background: #eef2ff; /* indigo-50 */
         }
 
         .focus-mode header,
@@ -1409,30 +1738,124 @@ export default function CoursePage() {
                 ? "bg-amber-500 text-white"
                 : mode === "adhd"
                 ? "bg-blue-500 text-white"
+                : mode === "adaptive"
+                ? "bg-indigo-500 text-white"
                 : "bg-purple-500 text-white"
               : "bg-white text-gray-700 border border-gray-200"
           } ${!isFocusMode && mode !== "normal" ? "pulse-animation" : ""}`}
           aria-label={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
           title={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="4"></circle>
-            <line x1="21.17" y1="8" x2="12" y2="8"></line>
-            <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
-            <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
-          </svg>
+          <Maximize2 className="w-5 h-5" />
         </button>
+
+        {/* Adaptive Mode Controls (only shown when adaptive mode is active) */}
+        {mode === "adaptive" && (
+          <>
+            <div className="adaptive-control">
+              <h3 className="text-sm font-medium text-indigo-800 mb-2">
+                Sensory Sensitivity Settings
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      checked={sensitivityProfile.textPatterns}
+                      onChange={(e) =>
+                        updateSensitivityProfile(
+                          "textPatterns",
+                          e.target.checked
+                        )
+                      }
+                      className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    Highlight difficult word patterns
+                  </label>
+                </div>
+                <div>
+                  <label className="flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      checked={sensitivityProfile.wordReplacement}
+                      onChange={(e) =>
+                        updateSensitivityProfile(
+                          "wordReplacement",
+                          e.target.checked
+                        )
+                      }
+                      className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    Replace complex words with simpler ones
+                  </label>
+                </div>
+                <div>
+                  <label className="flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      checked={sensitivityProfile.contrast}
+                      onChange={(e) =>
+                        updateSensitivityProfile("contrast", e.target.checked)
+                      }
+                      className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    Reduce contrast
+                  </label>
+                </div>
+                <div>
+                  <label className="flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      checked={sensitivityProfile.wordSpacing}
+                      onChange={(e) =>
+                        updateSensitivityProfile(
+                          "wordSpacing",
+                          e.target.checked
+                        )
+                      }
+                      className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    Increase word spacing
+                  </label>
+                </div>
+                <div>
+                  <label className="flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      checked={sensitivityProfile.fontWeight}
+                      onChange={(e) =>
+                        updateSensitivityProfile("fontWeight", e.target.checked)
+                      }
+                      className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    Increase font weight
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={applySensoryBreak}
+              className="sensory-break-button"
+            >
+              <span className="sr-only">Take a sensory break</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 7V4H6v3" />
+                <path d="M18 11H6" />
+                <rect x="6" y="15" width="12" height="5" rx="1" />
+              </svg>
+            </button>
+          </>
+        )}
 
         {/* DYSLEXIA MODE SPECIFIC BUTTONS */}
         {mode === "dyslexia" && (
@@ -1599,6 +2022,16 @@ export default function CoursePage() {
                   }
                 >
                   ADHD Support
+                </TabsTrigger>
+                <TabsTrigger
+                  value="adaptive"
+                  className={
+                    mode === "adaptive"
+                      ? "bg-indigo-100 text-indigo-900 shadow-sm"
+                      : ""
+                  }
+                >
+                  Adaptive
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -2075,473 +2508,231 @@ export default function CoursePage() {
               </div>
             )}
 
-            {/* Dyslexia and ADHD mode content */}
-            {(mode === "dyslexia" || mode === "adhd") && (
-              <div className="space-y-8">
+            {/* Dyslexia Mode Content */}
+            {mode === "dyslexia" && (
+              <div className="dyslexia-font space-y-8">
                 {course.lessons.map((lesson) => (
                   <div
                     key={lesson.id}
-                    className={`p-6 rounded-lg border-l-4 ${
-                      mode === "dyslexia"
-                        ? "border-amber-400 bg-amber-50/50"
-                        : "border-blue-400 bg-blue-50/50"
-                    }`}
+                    className="overflow-hidden border-l-4 border-amber-400 shadow-md rounded-lg bg-white hover:shadow-lg transition duration-300"
                   >
-                    <h2
-                      className={`text-xl font-bold mb-4 ${
-                        mode === "dyslexia"
-                          ? "font-sans tracking-wide text-amber-800 bg-amber-100 px-3 py-2 rounded-md"
-                          : "text-blue-800 bg-blue-100 px-3 py-2 rounded-md"
-                      }`}
-                    >
-                      Lesson {lesson.id}: {lesson.title}
-                    </h2>
+                    <div className="p-1 bg-gradient-to-r from-amber-500 to-orange-500">
+                      <div className="bg-white p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h2 className="text-xl font-bold text-amber-800 flex items-center">
+                            <span className="bg-amber-100 text-amber-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 shadow-sm">
+                              {lesson.id}
+                            </span>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: detectPatterns(lesson.title),
+                              }}
+                            ></span>
+                          </h2>
+                          <Badge className="bg-amber-100 text-amber-700 px-3 py-1 text-sm font-medium">
+                            Lesson {lesson.id}
+                          </Badge>
+                        </div>
 
-                    <div className="p-5">
-                      <p
-                        className={`
-                        ${
-                          mode === "dyslexia"
-                            ? "text-lg font-sans tracking-wide leading-relaxed text-gray-800"
-                            : mode === "adhd"
-                            ? "text-base leading-relaxed text-gray-800"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {lesson.content}
-                      </p>
+                        <div className="mb-6">
+                          <p
+                            className="text-gray-700 leading-relaxed border-l-4 border-amber-200 pl-4 py-1 italic bg-amber-50 rounded-r-md"
+                            dangerouslySetInnerHTML={{
+                              __html: detectPatterns(
+                                lesson.content.split(".")[0] + "."
+                              ),
+                            }}
+                          ></p>
+                        </div>
 
-                      <div
-                        className={`mt-6 space-y-3 
-                        ${
-                          mode === "dyslexia"
-                            ? "border-t border-amber-200 pt-4"
-                            : mode === "adhd"
-                            ? "pt-4"
-                            : ""
-                        }`}
-                      >
-                        <h3
-                          className={`
-                          ${
-                            mode === "dyslexia"
-                              ? "text-lg font-sans tracking-wide font-medium text-amber-800"
-                              : mode === "adhd"
-                              ? "text-lg font-medium text-blue-700 border-l-4 border-blue-400 pl-3"
-                              : "text-lg font-medium text-gray-800"
-                          }`}
-                        >
-                          Key Points
+                        <h3 className="font-semibold text-amber-700 mb-2">
+                          Key Topics
                         </h3>
-
-                        <ul
-                          className={`space-y-2 
-                          ${
-                            mode === "dyslexia"
-                              ? "ml-6"
-                              : mode === "adhd"
-                              ? "space-y-4"
-                              : "ml-5"
-                          }`}
-                        >
-                          {lesson.sections.map((section, idx) => (
-                            <li
-                              key={idx}
-                              className={`
-                                ${
-                                  mode === "dyslexia"
-                                    ? "text-base font-sans tracking-wide leading-relaxed flex items-start gap-3"
-                                    : mode === "adhd"
-                                    ? "bg-white p-4 rounded-md shadow-sm border border-blue-200 flex items-start gap-3"
-                                    : "text-gray-700 flex items-start gap-2"
-                                }`}
-                            >
-                              {mode === "dyslexia" && (
-                                <div className="min-w-5 w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold mt-1">
-                                  {idx + 1}
-                                </div>
-                              )}
-
-                              {mode === "adhd" && (
-                                <div className="min-w-8 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
-                                  {idx + 1}
-                                </div>
-                              )}
-
-                              {!mode.includes("dyslexia") &&
-                                !mode.includes("adhd") && (
-                                  <div className="min-w-4 mt-1">•</div>
-                                )}
-
+                        <ul className="space-y-2 mb-6">
+                          {lesson.sections.map((section, i) => (
+                            <li key={i} className="flex items-start">
+                              <div className="bg-amber-100 text-amber-600 w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                                {i + 1}
+                              </div>
                               <span
-                                className={`
-                                  ${
-                                    mode === "dyslexia"
-                                      ? "text-gray-800"
-                                      : mode === "adhd"
-                                      ? "text-gray-700 font-medium"
-                                      : ""
-                                  }`}
-                              >
-                                {section}
-                              </span>
+                                className="text-gray-700"
+                                dangerouslySetInnerHTML={{
+                                  __html: detectPatterns(section),
+                                }}
+                              ></span>
                             </li>
                           ))}
                         </ul>
-                      </div>
-                    </div>
-                  </div>
-                ))}
 
-                <div className="flex flex-col space-y-4 items-center mt-8">
-                  {course.quizData && (
-                    <div
-                      className={`w-full max-w-4xl rounded-xl overflow-hidden shadow-lg ${
-                        mode === "normal"
-                          ? "bg-white"
-                          : mode === "dyslexia"
-                          ? "bg-amber-50 border border-amber-200"
-                          : "bg-blue-50 border border-blue-200"
-                      }`}
-                    >
-                      <div
-                        className={`px-6 py-4 ${
-                          mode === "normal"
-                            ? "bg-purple-600 text-white"
-                            : mode === "dyslexia"
-                            ? "bg-amber-600 text-white"
-                            : "bg-blue-600 text-white"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3
-                              className={`font-bold ${
-                                mode === "dyslexia"
-                                  ? "text-xl tracking-wide"
-                                  : "text-lg"
-                              }`}
-                            >
-                              {course.quizData.title}
-                            </h3>
-                            <p className="text-sm opacity-90 mt-1">
-                              {course.quizData.questions.length} questions •{" "}
-                              {course.quizData.timeLimit} minutes
-                            </p>
-                          </div>
-                          <div
-                            className={`flex flex-col items-end ${
-                              mode === "dyslexia" ? "text-lg" : "text-base"
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <Clock
-                                size={mode === "dyslexia" ? 20 : 16}
-                                className="mr-1"
-                              />
-                              <span>
-                                Time Limit: {course.quizData.timeLimit} min
-                              </span>
-                            </div>
-                            <div className="flex items-center mt-1">
-                              <Target
-                                size={mode === "dyslexia" ? 20 : 16}
-                                className="mr-1"
-                              />
-                              <span>
-                                Passing Score: {course.quizData.passingScore}%
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="px-6 py-4">
-                        <div className="mb-4">
-                          <h4
-                            className={`font-medium mb-2 ${
-                              mode === "dyslexia"
-                                ? "text-amber-800 text-lg tracking-wide"
-                                : mode === "adhd"
-                                ? "text-blue-800"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            Sample Question:
-                          </h4>
-
-                          <div
-                            className={`p-4 rounded-lg ${
-                              mode === "dyslexia"
-                                ? "bg-white border border-amber-200"
-                                : mode === "adhd"
-                                ? "bg-white border border-blue-200"
-                                : "bg-gray-50"
-                            }`}
-                          >
-                            <p
-                              className={`mb-3 ${
-                                mode === "dyslexia"
-                                  ? "text-lg tracking-wide"
-                                  : ""
-                              }`}
-                            >
-                              {course.quizData.questions[0].question}
-                            </p>
-
-                            <div className="space-y-2">
-                              {course.quizData.questions[0].options.map(
-                                (option, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={`flex items-center p-2 rounded ${
-                                      mode === "dyslexia"
-                                        ? "hover:bg-amber-100"
-                                        : mode === "adhd"
-                                        ? "hover:bg-blue-100"
-                                        : "hover:bg-gray-100"
-                                    }`}
-                                  >
-                                    <div
-                                      className={`w-5 h-5 rounded-full border flex-shrink-0 mr-3 ${
-                                        mode === "dyslexia"
-                                          ? "border-amber-400"
-                                          : mode === "adhd"
-                                          ? "border-blue-400"
-                                          : "border-gray-400"
-                                      }`}
-                                    ></div>
-                                    <span
-                                      className={
-                                        mode === "dyslexia"
-                                          ? "tracking-wide"
-                                          : ""
-                                      }
-                                    >
-                                      {option}
-                                    </span>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div
-                          className={`p-4 rounded-lg mb-4 ${
-                            mode === "dyslexia"
-                              ? "bg-amber-100 border border-amber-200"
-                              : mode === "adhd"
-                              ? "bg-blue-100 border border-blue-200"
-                              : "bg-purple-100 border border-purple-200"
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <Info
-                              size={20}
-                              className={`mr-2 ${
-                                mode === "dyslexia"
-                                  ? "text-amber-700"
-                                  : mode === "adhd"
-                                  ? "text-blue-700"
-                                  : "text-purple-700"
-                              }`}
-                            />
-                            <h4
-                              className={`font-medium ${
-                                mode === "dyslexia"
-                                  ? "text-amber-800 tracking-wide"
-                                  : mode === "adhd"
-                                  ? "text-blue-800"
-                                  : "text-purple-800"
-                              }`}
-                            >
-                              Quiz Information
-                            </h4>
-                          </div>
-
-                          <ul
-                            className={`mt-2 space-y-1 ${
-                              mode === "dyslexia"
-                                ? "text-amber-700 tracking-wide"
-                                : mode === "adhd"
-                                ? "text-blue-700"
-                                : "text-purple-700"
-                            }`}
-                          >
-                            <li className="flex items-start gap-2">
-                              <Check size={16} className="mt-1 flex-shrink-0" />
-                              <span>
-                                Multiple choice and true/false questions
-                              </span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <Check size={16} className="mt-1 flex-shrink-0" />
-                              <span>
-                                Covers material from all {course.lessons.length}{" "}
-                                lessons
-                              </span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <Check size={16} className="mt-1 flex-shrink-0" />
-                              <span>
-                                Detailed explanations provided after submission
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-
-                        {mode === "dyslexia" && (
-                          <div className="p-4 rounded-lg mb-4 bg-amber-50 border border-amber-200">
-                            <div className="flex items-center">
-                              <Volume2
-                                size={20}
-                                className="mr-2 text-amber-700"
-                              />
-                              <h4 className="font-medium text-amber-800 tracking-wide">
-                                Accessibility Features
-                              </h4>
-                            </div>
-                            <p className="mt-1 text-amber-700">
-                              Questions can be read aloud using the
-                              text-to-speech feature. Font and spacing are
-                              optimized for reading ease.
-                            </p>
-                          </div>
-                        )}
-
-                        {mode === "adhd" && (
-                          <div className="p-4 rounded-lg mb-4 bg-blue-50 border border-blue-200">
-                            <div className="flex items-center">
-                              <Clock size={20} className="mr-2 text-blue-700" />
-                              <h4 className="font-medium text-blue-800">
-                                Focus Assistance
-                              </h4>
-                            </div>
-                            <p className="mt-1 text-blue-700">
-                              Timer with visual cues, one question at a time
-                              display option, and progress tracking to maintain
-                              focus.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div
-                        className={`px-6 py-4 ${
-                          mode === "normal"
-                            ? "bg-gray-50 border-t border-gray-200"
-                            : mode === "dyslexia"
-                            ? "bg-amber-100/50 border-t border-amber-200"
-                            : "bg-blue-100/50 border-t border-blue-200"
-                        }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center">
-                            <LightbulbIcon
-                              size={18}
-                              className={`mr-2 ${
-                                mode === "dyslexia"
-                                  ? "text-amber-700"
-                                  : mode === "adhd"
-                                  ? "text-blue-700"
-                                  : "text-purple-700"
-                              }`}
-                            />
-                            <span
-                              className={`text-sm ${
-                                mode === "dyslexia"
-                                  ? "text-amber-700 tracking-wide"
-                                  : mode === "adhd"
-                                  ? "text-blue-700"
-                                  : "text-gray-600"
-                              }`}
-                            >
-                              You can retake the quiz to improve your score
-                            </span>
-                          </div>
-
+                        <div className="flex gap-3 mt-4">
+                          <Button className="bg-amber-600 hover:bg-amber-700">
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Continue Learning
+                          </Button>
                           <Button
-                            className={`${
-                              mode === "normal"
-                                ? "bg-[#6C48C5] hover:bg-[#5a39b0] text-white"
-                                : mode === "dyslexia"
-                                ? "bg-amber-600 hover:bg-amber-700 text-white text-lg tracking-wide"
-                                : "bg-blue-600 hover:bg-blue-700 text-white"
-                            } px-6 py-2 rounded-lg`}
-                            asChild
+                            variant="outline"
+                            className="border-amber-200 text-amber-700 hover:bg-amber-50"
                           >
-                            <Link href={`/quiz/${courseId}`}>Start Quiz</Link>
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Mark as Complete
                           </Button>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
             )}
 
-            {mode === "dyslexia" && (
-              <div className="p-5 bg-amber-50 border-2 border-amber-300 rounded-lg mt-8">
-                <h3 className="text-xl font-medium mb-3 font-sans tracking-wide text-amber-800">
-                  Reading Tips for Dyslexia:
-                </h3>
-                <ul className="space-y-3 text-base font-sans tracking-wide leading-relaxed text-gray-700">
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold mt-1">
-                      ✓
-                    </div>
-                    <span>
-                      Use the "Listen" button to hear the content read aloud
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold mt-1">
-                      ✓
-                    </div>
-                    <span>Take breaks when needed to avoid visual fatigue</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold mt-1">
-                      ✓
-                    </div>
-                    <span>
-                      Use the "Generate Study Notes" feature to create
-                      simplified summaries
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            )}
-
+            {/* ADHD Mode Content */}
             {mode === "adhd" && (
-              <div className="p-5 bg-blue-50 border-2 border-blue-300 rounded-lg mt-8">
-                <h3 className="text-xl font-medium mb-3 text-blue-800">
-                  Focus Tips for ADHD:
-                </h3>
-                <ul className="space-y-3 text-base text-gray-700">
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold mt-1">
-                      ✓
+              <div className="adhd-friendly space-y-8">
+                {course.lessons.map((lesson) => (
+                  <div
+                    key={lesson.id}
+                    className="overflow-hidden border-l-4 border-blue-400 shadow-md rounded-lg bg-white hover:shadow-lg transition duration-300"
+                  >
+                    <div className="p-1 bg-gradient-to-r from-blue-500 to-indigo-500">
+                      <div className="bg-white p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h2 className="text-xl font-bold text-blue-800 flex items-center">
+                            <span className="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 shadow-sm">
+                              {lesson.id}
+                            </span>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: detectPatterns(lesson.title),
+                              }}
+                            ></span>
+                          </h2>
+                          <Badge className="bg-blue-100 text-blue-700 px-3 py-1 text-sm font-medium">
+                            Lesson {lesson.id}
+                          </Badge>
+                        </div>
+
+                        <div className="mb-6">
+                          <p
+                            className="text-gray-700 leading-relaxed border-l-4 border-blue-200 pl-4 py-1 italic bg-blue-50 rounded-r-md"
+                            dangerouslySetInnerHTML={{
+                              __html: detectPatterns(
+                                lesson.content.split(".")[0] + "."
+                              ),
+                            }}
+                          ></p>
+                        </div>
+
+                        <h3 className="font-semibold text-blue-700 mb-2">
+                          Key Topics
+                        </h3>
+                        <ul className="space-y-2 mb-6">
+                          {lesson.sections.map((section, i) => (
+                            <li key={i} className="flex items-start">
+                              <div className="bg-blue-100 text-blue-600 w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                                {i + 1}
+                              </div>
+                              <span
+                                className="text-gray-700"
+                                dangerouslySetInnerHTML={{
+                                  __html: detectPatterns(section),
+                                }}
+                              ></span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex gap-3 mt-4">
+                          <Button className="bg-blue-600 hover:bg-blue-700">
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Continue Learning
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Mark as Complete
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <span>Focus on one key point at a time</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold mt-1">
-                      ✓
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Adaptive Mode Content */}
+            {mode === "adaptive" && (
+              <div className="adaptive-sensory space-y-8">
+                {course.lessons.map((lesson) => (
+                  <div
+                    key={lesson.id}
+                    className="overflow-hidden border-l-4 border-indigo-400 shadow-md rounded-lg bg-white hover:shadow-lg transition duration-300"
+                  >
+                    <div className="p-1 bg-gradient-to-r from-indigo-500 to-purple-500">
+                      <div className="bg-white p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h2 className="text-xl font-bold text-indigo-800 flex items-center">
+                            <span className="bg-indigo-100 text-indigo-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 shadow-sm">
+                              {lesson.id}
+                            </span>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: detectPatterns(lesson.title),
+                              }}
+                            ></span>
+                          </h2>
+                          <Badge className="bg-indigo-100 text-indigo-700 px-3 py-1 text-sm font-medium">
+                            Lesson {lesson.id}
+                          </Badge>
+                        </div>
+
+                        <div className="mb-6">
+                          <p
+                            className="text-gray-700 leading-relaxed border-l-4 border-indigo-200 pl-4 py-1 italic bg-indigo-50 rounded-r-md"
+                            dangerouslySetInnerHTML={{
+                              __html: detectPatterns(
+                                lesson.content.split(".")[0] + "."
+                              ),
+                            }}
+                          ></p>
+                        </div>
+
+                        <h3 className="font-semibold text-indigo-700 mb-2">
+                          Key Topics
+                        </h3>
+                        <ul className="space-y-2 mb-6">
+                          {lesson.sections.map((section, i) => (
+                            <li key={i} className="flex items-start">
+                              <div className="bg-indigo-100 text-indigo-600 w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                                {i + 1}
+                              </div>
+                              <span
+                                className="text-gray-700"
+                                dangerouslySetInnerHTML={{
+                                  __html: detectPatterns(section),
+                                }}
+                              ></span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex gap-3 mt-4">
+                          <Button className="bg-indigo-600 hover:bg-indigo-700">
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Continue Learning
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Mark as Complete
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <span>
-                      Take short breaks between sections (try the Pomodoro
-                      technique)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="min-w-5 w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold mt-1">
-                      ✓
-                    </div>
-                    <span>Use the progress tracker to maintain motivation</span>
-                  </li>
-                </ul>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -2558,6 +2749,8 @@ export default function CoursePage() {
                     ? "bg-amber-600 hover:bg-amber-700 text-white"
                     : mode === "adhd"
                     ? "bg-blue-600 hover:bg-blue-700 text-white"
+                    : mode === "adaptive"
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-white"
                     : "bg-blue-600 hover:bg-blue-700 text-white"
                 } flex items-center gap-2`}
               >
@@ -3471,6 +3664,40 @@ export default function CoursePage() {
                       ✓
                     </div>
                     <span>Timer tools to help manage attention spans</span>
+                  </li>
+                </ul>
+              </div>
+            )}
+
+            {mode === "adaptive" && (
+              <div className="mt-6 p-5 bg-indigo-50 border-2 border-indigo-300 rounded-lg">
+                <h3 className="text-xl font-medium mb-2 text-indigo-800">
+                  Adaptive Mode Features:
+                </h3>
+                <ul className="space-y-2 text-base text-gray-700">
+                  <li className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold">
+                      ✓
+                    </div>
+                    <span>Personalized sensory sensitivity detection</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold">
+                      ✓
+                    </div>
+                    <span>Adaptive content transformation for comfort</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold">
+                      ✓
+                    </div>
+                    <span>Complex word replacement to simplify reading</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-800 font-bold">
+                      ✓
+                    </div>
+                    <span>Immediate sensory break option when needed</span>
                   </li>
                 </ul>
               </div>

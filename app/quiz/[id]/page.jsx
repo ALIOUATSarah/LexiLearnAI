@@ -818,6 +818,7 @@ export default function QuizPage() {
                 <TabsTrigger value="normal">Normal Mode</TabsTrigger>
                 <TabsTrigger value="dyslexia">Dyslexia Mode</TabsTrigger>
                 <TabsTrigger value="adhd">ADHD Mode</TabsTrigger>
+                <TabsTrigger value="adaptive">Adaptive</TabsTrigger>
               </TabsList>
             </Tabs>
 

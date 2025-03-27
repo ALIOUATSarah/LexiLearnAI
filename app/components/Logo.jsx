@@ -24,6 +24,8 @@ export default function Logo({ mode = "normal", size = "md" }) {
         return "bg-gradient-to-br from-blue-500 to-blue-600";
       case "executive":
         return "bg-gradient-to-br from-teal-500 to-teal-600";
+      case "adaptive":
+        return "bg-gradient-to-br from-indigo-500 to-violet-600";
       default:
         return "bg-gradient-to-br from-indigo-500 to-purple-600";
     }
@@ -38,6 +40,8 @@ export default function Logo({ mode = "normal", size = "md" }) {
         return "#60A5FA"; // blue
       case "executive":
         return "#14B8A6"; // teal
+      case "adaptive":
+        return "#818CF8"; // indigo
       default:
         return "#A78BFA"; // purple
     }
@@ -52,6 +56,8 @@ export default function Logo({ mode = "normal", size = "md" }) {
         return "text-blue-800";
       case "executive":
         return "text-teal-800";
+      case "adaptive":
+        return "text-indigo-800";
       default:
         return "bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent";
     }
@@ -66,6 +72,8 @@ export default function Logo({ mode = "normal", size = "md" }) {
         return "text-blue-600";
       case "executive":
         return "text-teal-600";
+      case "adaptive":
+        return "text-indigo-600";
       default:
         return "text-purple-600";
     }
@@ -271,6 +279,12 @@ export default function Logo({ mode = "normal", size = "md" }) {
             style={{ animationDuration: "3s" }}
           ></div>
         )}
+        {mode === "adaptive" && (
+          <div
+            className="absolute inset-0 bg-indigo-400 opacity-10 animate-pulse"
+            style={{ animationDuration: "4s" }}
+          ></div>
+        )}
         {mode === "normal" && (
           <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
         )}
@@ -301,10 +315,15 @@ export default function Logo({ mode = "normal", size = "md" }) {
             AI
           </span>
         </h1>
-        {(mode === "dyslexia" || mode === "adhd" || mode === "executive") && (
+        {(mode === "dyslexia" ||
+          mode === "adhd" ||
+          mode === "executive" ||
+          mode === "adaptive") && (
           <div className={`text-xs font-medium ${getAccentTextColor()}`}>
             {mode === "executive"
               ? "Executive Function Support"
+              : mode === "adaptive"
+              ? "Personalized Sensory Support"
               : "Accessible Education"}
           </div>
         )}
