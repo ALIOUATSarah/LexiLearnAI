@@ -15,9 +15,11 @@ import { Progress } from "@/components/ui/progress";
 import { BarChart, LineChart } from "@/components/charts";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
+import Logo from "@/app/components/Logo";
 
 export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [mode, setMode] = useState("normal");
 
   // Simulated student data (in a real app, this would come from an API)
   const studentData = {
@@ -159,14 +161,9 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50">
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
-              <span className="text-white font-bold">L</span>
-            </div>
-            <h1 className="text-xl font-bold">LexiLearn AI</h1>
-          </div>
+          <Logo mode={mode} />
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Button
               variant="outline"
               className="border-green-300 text-green-600 hidden sm:flex"
@@ -731,3 +728,6 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+// Global styles for animations
+export const dynamic = "force-dynamic";

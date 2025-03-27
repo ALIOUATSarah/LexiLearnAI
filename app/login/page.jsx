@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Logo from "@/app/components/Logo";
 
 export default function Login() {
   const router = useRouter();
@@ -44,12 +45,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
       <Card className="w-full max-w-md border-t-4 border-t-primary shadow-lg">
         <CardHeader className="space-y-1 bg-gradient-to-r from-blue-50 to-purple-50">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
-              <span className="text-white font-bold">L</span>
-            </div>
-            <h2 className="text-xl font-bold">LexiLearn AI</h2>
-          </div>
+          <Logo size="lg" />
           <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
             Sign in
           </CardTitle>
@@ -57,6 +53,7 @@ export default function Login() {
             Enter your ID and password to access your account
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">

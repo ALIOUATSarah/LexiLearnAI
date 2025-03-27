@@ -33,7 +33,7 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-    
+
     /* Custom colors for LexiLearn */
     --cream: 39 100% 97%;
     --dark: 220 20% 20%;
@@ -110,4 +110,24 @@
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+/* Animation for Logo component */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

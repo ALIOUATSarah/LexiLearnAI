@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Play, Clock, Award, BookOpen } from "lucide-react";
+import Logo from "@/app/components/Logo";
 
 export default function Lessons() {
   const [mode, setMode] = useState("normal");
@@ -159,12 +160,7 @@ export default function Lessons() {
 
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary rounded-md w-8 h-8 flex items-center justify-center">
-              <span className="text-white font-bold">L</span>
-            </div>
-            <h1 className="text-xl font-bold">LexiLearn AI</h1>
-          </div>
+          <Logo mode={mode} />
 
           <div className="flex items-center gap-4">
             <Tabs value={mode} onValueChange={(value) => setMode(value)}>
