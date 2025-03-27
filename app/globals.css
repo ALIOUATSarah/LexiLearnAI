@@ -131,3 +131,299 @@
 .animate-ping-slow {
   animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+/* Animation for Executive Function transition warnings */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Animation for executive function tip shrinking */
+@keyframes shrink {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.animate-shrink {
+  animation: shrink 8s linear forwards;
+}
+
+/* Animation for scaffolding fade effect */
+@keyframes scaffoldFade {
+  0% {
+    opacity: 1;
+    height: 100%;
+  }
+  100% {
+    opacity: 0.3;
+    height: 30%;
+  }
+}
+
+.animate-scaffold-fade {
+  animation: scaffoldFade 1.5s ease-out forwards;
+}
+
+/* Animation for progress indicator pulse */
+@keyframes progressPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(20, 184, 166, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0);
+  }
+}
+
+.animate-progress-pulse {
+  animation: progressPulse 2s infinite;
+}
+
+/* Animation for level change transition */
+@keyframes levelTransition {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-level-transition {
+  animation: levelTransition 0.5s ease-out;
+}
+
+/* Add rounded corners to all cards */
+.card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Animated progress bar for ADHD mode */
+@keyframes progressGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(20, 184, 166, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(20, 184, 166, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(20, 184, 166, 0.5);
+  }
+}
+
+.progress-glow {
+  animation: progressGlow 2s infinite;
+}
+
+/* Modern card hover effect */
+.hover-card-effect {
+  transition: all 0.2s ease-in-out;
+}
+
+.hover-card-effect:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Modern glass morphism effect for executive function scaffolding */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Subtle pulse animation for active elements */
+@keyframes subtlePulse {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+
+.subtle-pulse {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar for executive function dialogs */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth scaling animation for task completion */
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+/* Executive function scaffolding fade animation - improved */
+@keyframes scaffoldingFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+}
+
+.animate-scaffold-fade {
+  animation: scaffoldingFade 0.8s ease-out forwards;
+}
+
+/* Support level transition animation */
+@keyframes supportLevelChange {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+    background-color: rgba(20, 184, 166, 0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.support-level-change {
+  animation: supportLevelChange 0.5s ease-in-out;
+}
+
+/* Modern gradient backgrounds */
+.gradient-blue-teal {
+  background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+}
+
+.gradient-purple-blue {
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+}
+
+.gradient-teal-emerald {
+  background: linear-gradient(135deg, #14b8a6 0%, #10b981 100%);
+}
+
+/* Customized progress indicators */
+.progress-indicator {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #14b8a6, #06b6d4);
+  transition: width 0.5s ease-in-out;
+}
+
+/* Task step completion effect */
+.step-completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+/* Blob animation for homepage decorative elements */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Logo showcase animation */
+@keyframes logoFloat {
+  0% {
+    transform: translateY(0) rotate(12deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(8deg);
+  }
+  100% {
+    transform: translateY(0) rotate(12deg);
+  }
+}
+
+.logo-float {
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+/* Enhanced hover effects */
+.feature-card-hover {
+  transition: all 0.3s ease-out;
+}
+
+.feature-card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

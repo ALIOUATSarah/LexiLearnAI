@@ -86,6 +86,45 @@ export default function TeacherDashboard() {
     ],
   };
 
+  // Add a new state for tracking which students are using executive scaffolding
+  const [executiveScaffolding, setExecutiveScaffolding] = useState(
+    classData.students.reduce((acc, student) => {
+      acc[student.id] = false;
+      return acc;
+    }, {})
+  );
+
+  // Add notification state
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+
+  // Update the toggleExecutiveScaffolding function to show a notification
+  const toggleExecutiveScaffolding = (studentId) => {
+    const studentName = classData.students.find((s) => s.id === studentId).name;
+    const newValue = !executiveScaffolding[studentId];
+
+    setExecutiveScaffolding((prev) => ({
+      ...prev,
+      [studentId]: newValue,
+    }));
+
+    setNotification({
+      show: true,
+      message: `Executive Scaffolding ${
+        newValue ? "applied to" : "removed from"
+      } ${studentName}`,
+      type: newValue ? "success" : "info",
+    });
+
+    // Auto-dismiss notification after 3 seconds
+    setTimeout(() => {
+      setNotification({ show: false, message: "", type: "" });
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
       <header className="bg-white border-b sticky top-0 z-10">
@@ -130,6 +169,18 @@ export default function TeacherDashboard() {
               </Badge>
             </div>
           </div>
+
+          {notification.show && (
+            <div
+              className={`mt-4 p-3 rounded-md ${
+                notification.type === "success"
+                  ? "bg-green-100 text-green-800 border border-green-200"
+                  : "bg-blue-100 text-blue-800 border border-blue-200"
+              }`}
+            >
+              {notification.message}
+            </div>
+          )}
         </div>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 items-stretch">
@@ -410,9 +461,26 @@ export default function TeacherDashboard() {
                         )}
 
                         {student.needsHelp && (
-                          <div className="mt-3 text-sm text-red-600 font-medium">
-                            This student needs additional support. Performance
-                            is below average.
+                          <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                            <div className="text-sm text-red-600 font-medium">
+                              This student needs additional support. Performance
+                              is below average.
+                            </div>
+                            <Button
+                              size="sm"
+                              className={
+                                executiveScaffolding[student.id]
+                                  ? "bg-teal-600 hover:bg-teal-700"
+                                  : "bg-amber-600 hover:bg-amber-700"
+                              }
+                              onClick={() =>
+                                toggleExecutiveScaffolding(student.id)
+                              }
+                            >
+                              {executiveScaffolding[student.id]
+                                ? "Remove Executive Scaffolding"
+                                : "Apply Executive Scaffolding"}
+                            </Button>
                           </div>
                         )}
                       </div>
@@ -493,6 +561,74 @@ export default function TeacherDashboard() {
                             </Button>
                           </div>
                         ))}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-teal-50 border border-teal-200 rounded-md">
+                    <h3 className="font-bold text-teal-700 mb-2">
+                      Executive Function Support
+                    </h3>
+                    <p className="mb-3">
+                      {
+                        Object.values(executiveScaffolding).filter(Boolean)
+                          .length
+                      }{" "}
+                      students are currently using Executive Scaffolding
+                      support.
+                    </p>
+
+                    {Object.values(executiveScaffolding).some(Boolean) ? (
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-gray-800">
+                          Students with Executive Scaffolding:
+                        </h4>
+                        {classData.students
+                          .filter((s) => executiveScaffolding[s.id])
+                          .map((student) => (
+                            <div
+                              key={student.id}
+                              className="flex justify-between items-center p-2 bg-white rounded border border-teal-200"
+                            >
+                              <span>{student.name}</span>
+                              <Badge
+                                variant="outline"
+                                className="bg-teal-50 text-teal-700 border-teal-300"
+                              >
+                                Executive Support Active
+                              </Badge>
+                            </div>
+                          ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm italic text-gray-600">
+                        No students are currently using Executive Function
+                        Scaffolding. Apply it to students who need help with
+                        organization and planning.
+                      </p>
+                    )}
+
+                    <div className="mt-4 p-3 bg-white rounded border border-teal-200">
+                      <h4 className="font-medium text-teal-800 mb-1">
+                        Benefits of Executive Scaffolding:
+                      </h4>
+                      <ul className="list-disc pl-5 text-sm space-y-1">
+                        <li>
+                          Helps students break down complex tasks into
+                          manageable steps
+                        </li>
+                        <li>
+                          Provides time management tools and visual progress
+                          tracking
+                        </li>
+                        <li>
+                          Gradually reduces support as students develop
+                          independent skills
+                        </li>
+                        <li>
+                          Improves completion rates for assignments by 42% on
+                          average
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
