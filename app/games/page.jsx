@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,8 @@ import { GameWordScramble } from "@/components/games/word-scramble-game";
 import { GameFlashcards } from "@/components/games/flashcard-game";
 import { useSearchParams } from "next/navigation";
 
-export default function GamesPage() {
+// Client component that uses useSearchParams
+function GamesContent() {
   const [activeGame, setActiveGame] = useState(null);
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -211,5 +212,16 @@ export default function GamesPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function GamesPage() {
+  return (
+    <Suspense
+      fallback={<div className="p-8 text-center">Loading games...</div>}
+    >
+      <GamesContent />
+    </Suspense>
   );
 }
