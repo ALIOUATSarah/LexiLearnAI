@@ -3902,11 +3902,7 @@ export default function CoursePage() {
                     : "border-gray-200 bg-gray-50"
                 }`}
               >
-                <img
-                  src="/assets/note-placeholder.svg"
-                  alt="Notes"
-                  className="w-24 h-24 opacity-70 mb-4"
-                />
+                
                 <p
                   className={`text-lg ${
                     mode === "dyslexia"

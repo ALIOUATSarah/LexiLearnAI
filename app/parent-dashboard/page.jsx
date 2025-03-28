@@ -204,7 +204,7 @@ export default function ParentDashboard() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="flex w-full overflow-x-auto whitespace-nowrap no-scrollbar gap-2 p-1 mb-6 bg-transparent">
             <TabsTrigger value="overview">Course Overview</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
             <TabsTrigger value="attendance">Attendance</TabsTrigger>
