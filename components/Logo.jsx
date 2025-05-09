@@ -265,68 +265,6 @@ export default function Logo({ mode = "normal", size = "md" }) {
             />
           </svg>
         </div>
-
-        {/* Enhanced effects for different modes */}
-        {mode === "adhd" && (
-          <div className="absolute inset-0 bg-blue-400 opacity-20 animate-pulse"></div>
-        )}
-        {mode === "dyslexia" && (
-          <div className="absolute inset-0 bg-amber-400 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-        )}
-        {mode === "executive" && (
-          <div
-            className="absolute inset-0 bg-teal-400 opacity-20 animate-pulse"
-            style={{ animationDuration: "3s" }}
-          ></div>
-        )}
-        {mode === "adaptive" && (
-          <div
-            className="absolute inset-0 bg-indigo-400 opacity-10 animate-pulse"
-            style={{ animationDuration: "4s" }}
-          ></div>
-        )}
-        {mode === "normal" && (
-          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-        )}
-      </div>
-
-      <div>
-        <h1
-          className={`${
-            size === "sm" ? "text-lg" : size === "md" ? "text-xl" : "text-2xl"
-          } font-bold flex items-center`}
-        >
-          <span
-            className={`${
-              mode === "dyslexia" ? "tracking-wide" : ""
-            } ${getTextColor()}`}
-          >
-            LexiLearn
-          </span>
-          <span
-            className={`ml-1 ${
-              size === "sm"
-                ? "text-xs"
-                : size === "md"
-                ? "text-sm"
-                : "text-base"
-            } font-semibold ${getAccentTextColor()}`}
-          >
-            AI
-          </span>
-        </h1>
-        {(mode === "dyslexia" ||
-          mode === "adhd" ||
-          mode === "executive" ||
-          mode === "adaptive") && (
-          <div className={`text-xs font-medium ${getAccentTextColor()}`}>
-            {mode === "executive"
-              ? "Executive Function Support"
-              : mode === "adaptive"
-              ? "Personalized Sensory Support"
-              : "Accessible Education"}
-          </div>
-        )}
       </div>
     </div>
   );

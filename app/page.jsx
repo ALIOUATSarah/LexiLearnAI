@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Logo from "@/app/components/Logo";
+import Logo from "@/components/Logo";
 import {
   ArrowRight,
   Brain,
@@ -16,6 +16,12 @@ import {
   Play,
   Menu,
   X,
+  ArrowUpCircle,
+  User,
+  Settings,
+  Target,
+  Gauge,
+  Award,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -24,6 +30,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const dashboardImages = ["/dash1.jpg", "/dash2.jpg", "/dash3.jpg"];
+  const [activeFeature, setActiveFeature] = useState(0);
 
   // Auto-rotate dashboard images
   useEffect(() => {
@@ -35,6 +42,51 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-rotate features
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev === 3 ? 0 : prev + 1));
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Features for the adaptive learning section
+  const adaptiveFeatures = [
+    {
+      title: "Personalized Difficulty",
+      description:
+        "Content difficulty automatically adjusts based on student performance, ensuring optimal challenge.",
+      icon: <Gauge className="w-10 h-10 text-amber-500" />,
+      color: "bg-amber-50 border-amber-200",
+      textColor: "text-amber-700",
+    },
+    {
+      title: "Intelligent Scaffolding",
+      description:
+        "Support gradually decreases as mastery increases, building independence and confidence.",
+      icon: <ArrowUpCircle className="w-10 h-10 text-indigo-500" />,
+      color: "bg-indigo-50 border-indigo-200",
+      textColor: "text-indigo-700",
+    },
+    {
+      title: "Learning Style Adaptation",
+      description:
+        "Content presentation adapts to visual, auditory, reading, or kinesthetic preferences.",
+      icon: <User className="w-10 h-10 text-teal-500" />,
+      color: "bg-teal-50 border-teal-200",
+      textColor: "text-teal-700",
+    },
+    {
+      title: "Smart Review Scheduling",
+      description:
+        "Uses spaced repetition to schedule reviews at optimal times for knowledge retention.",
+      icon: <Target className="w-10 h-10 text-rose-500" />,
+      color: "bg-rose-50 border-rose-200",
+      textColor: "text-rose-700",
+    },
+  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -144,7 +196,7 @@ export default function Home() {
                 <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-700/10 mb-6">
                   <span className="flex items-center">
                     <Brain className="w-3.5 h-3.5 mr-1.5" />
-                    <span>Adaptive learning</span>
+                    <span>Empowering learners through adaptive learning solutions</span>
                   </span>
                 </div>
 
@@ -153,9 +205,9 @@ export default function Home() {
                 </h1>
 
                 <p className="text-lg sm:text-xl md:text-2xl mb-8 text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  Unlock personalized learning experiences that dynamically
-                  adapt to each student's needs, making education accessible and
-                  engaging for all learners.
+                  LexiLearn AI dynamically personalizes learning experiences,
+                  making education more accessible, engaging, and effective for
+                  students of all abilities.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -198,61 +250,144 @@ export default function Home() {
                       className="w-8 h-8 rounded-full ring-2 ring-white object-cover"
                     />
                     <img
-                      src="https://randomuser.me/api/portraits/men/41.jpg"
+                      src="https://randomuser.me/api/portraits/men/22.jpg"
                       alt="Educator"
                       className="w-8 h-8 rounded-full ring-2 ring-white object-cover"
                     />
                   </div>
-                  <div className="ml-3 text-sm text-gray-500 font-medium">
-                    Trusted by{" "}
-                    <span className="text-indigo-600 font-semibold">
-                      1,000+
-                    </span>{" "}
-                    educators
-                  </div>
-                </div>
-              </div>
-
-              <div className="lg:w-1/2 relative w-full max-w-lg mx-auto lg:max-w-none">
-                <div className="relative w-full aspect-[16/9] rounded-lg shadow-2xl overflow-hidden">
-                  {dashboardImages.map((src, index) => (
-                    <div
-                      key={index}
-                      className={`absolute inset-0 transition-opacity duration-1000 ${
-                        currentImageIndex === index
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
-                    >
-                      <Image
-                        src={src}
-                        alt={`LexiLearn Dashboard ${index + 1}`}
-                        fill
-                        className="object-cover object-center"
-                        priority={index === 0}
-                      />
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">
+                      Trusted by 120+ educators
+                    </p>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-3.5 h-3.5 text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                      ))}
+                      <p className="ml-1 text-sm text-gray-500">
+                        4.9/5 average rating
+                      </p>
                     </div>
-                  ))}
-
-                  {/* Carousel indicators */}
-                  <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
-                    {dashboardImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                          currentImageIndex === index
-                            ? "bg-white"
-                            : "bg-white/50 hover:bg-white/80"
-                        }`}
-                        aria-label={`View dashboard image ${index + 1}`}
-                      />
-                    ))}
                   </div>
                 </div>
-                <div className="absolute -top-6 -right-6 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
-                <div className="absolute -bottom-8 -left-8 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
               </div>
+
+              <div className="lg:w-1/2 mt-10 lg:mt-0">
+                <div className="relative mx-auto bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200 max-w-md transition-all duration-500">
+                  {/* Adaptive Features Showcase */}
+                  <div className="p-2">
+                    <div className="flex justify-between items-center mb-3 px-2">
+                      <div className="flex space-x-1">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      </div>
+                      <div className="text-xs text-gray-500">LexiLearn AI</div>
+                    </div>
+
+                    {/* Feature cards */}
+                    <div className="relative h-[480px] p-4 overflow-hidden">
+                      {adaptiveFeatures.map((feature, index) => (
+                        <div
+                          key={index}
+                          className={`absolute inset-x-4 p-6 rounded-xl border transition-all duration-500 transform ${
+                            feature.color
+                          } ${
+                            activeFeature === index
+                              ? "opacity-100 scale-100 translate-y-0 z-10"
+                              : "opacity-0 scale-95 translate-y-8 -z-10"
+                          }`}
+                          style={{
+                            top: "50%",
+                            transform: `translateY(-50%) ${
+                              activeFeature === index
+                                ? "scale(1)"
+                                : "scale(0.95)"
+                            }`,
+                          }}
+                        >
+                          <div className="mb-4">{feature.icon}</div>
+                          <h3
+                            className={`text-xl font-bold mb-2 ${feature.textColor}`}
+                          >
+                            {feature.title}
+                          </h3>
+                          <p className="text-gray-700">{feature.description}</p>
+
+                          {/* Progress indicator */}
+                          <div className="mt-6 flex justify-center">
+                            {adaptiveFeatures.map((_, i) => (
+                              <div
+                                key={i}
+                                className={`mx-1 w-2 h-2 rounded-full ${
+                                  i === activeFeature
+                                    ? "bg-indigo-600"
+                                    : "bg-gray-300"
+                                }`}
+                              ></div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Demo stats - fixed at bottom */}
+                      <div className="absolute bottom-4 left-4 right-4 bg-white rounded-lg shadow-md border border-gray-100 p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-sm font-semibold text-gray-900">
+                            Student Progress
+                          </h4>
+                          <span className="text-xs font-medium text-green-600">
+                            +28% Improvement
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                          <div
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2.5 rounded-full"
+                            style={{ width: "75%" }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between items-center mt-4">
+                          <div className="flex items-center space-x-1">
+                            <Award className="w-4 h-4 text-amber-500" />
+                            <span className="text-xs text-gray-500">
+                              Level 3
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Mastery: 75/100
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            <Settings className="w-3 h-3 inline mr-1" />
+                            Auto-adapting
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features section */}
+        <section id="features" className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Adaptive Features for Every Learning Style
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our platform analyzes student behavior and performance to
+                deliver personalized content that adapts to individual needs.
+              </p>
             </div>
           </div>
         </section>
@@ -534,13 +669,13 @@ export default function Home() {
                   <div className="flex items-center mb-4">
                     <div className="mr-4">
                       <div className="w-12 h-12 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-700 font-bold">
-                        YST
+                        YH
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Younes .</h4>
+                      <h4 className="font-semibold text-gray-900">Younes harhour</h4>
                       <p className="text-sm text-gray-500">
-                        10th Grade Student
+                        2nd year computer science student
                       </p>
                     </div>
                     <div className="ml-auto flex">

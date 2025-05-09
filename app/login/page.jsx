@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Logo from "@/app/components/Logo";
+import Logo from "@/components/Logo";
 
 export default function Login() {
   const router = useRouter();

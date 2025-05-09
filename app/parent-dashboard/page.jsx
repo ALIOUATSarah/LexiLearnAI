@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, LineChart, PieChart } from "@/components/charts";
-
+import Logo from "@/components/Logo";
 
 export default function ParentDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -38,12 +38,24 @@ export default function ParentDashboard() {
     grade: "10th Grade",
     school: "Lincoln High School",
     id: "S12345",
-    currentMode:"ADHD",
+    currentMode: "ADHD",
     courses: [
       { name: "Physics", progress: 95, message: "Excellent progress" },
-      { name: "Mathematics", progress: 75, message: "Incomplete practice tasks" },
-      { name: "Biology", progress: 60, message: "Homework missing for Chapter 3" },
-      { name: "Chemistry", progress: 40, message: "Low quiz scores – needs revision" },
+      {
+        name: "Mathematics",
+        progress: 75,
+        message: "Incomplete practice tasks",
+      },
+      {
+        name: "Biology",
+        progress: 60,
+        message: "Homework missing for Chapter 3",
+      },
+      {
+        name: "Chemistry",
+        progress: 40,
+        message: "Low quiz scores – needs revision",
+      },
       { name: "History", progress: 85, message: "Consistent effort noticed" },
     ],
     weeklyActivity: [
@@ -58,7 +70,7 @@ export default function ParentDashboard() {
     modePerformance: [
       { mode: "Normal", score: 30 },
       { mode: "Dyslexia", score: 53 },
-      { mode: "ADHD", score: 81},
+      { mode: "ADHD", score: 81 },
     ],
   };
 
@@ -67,9 +79,7 @@ export default function ParentDashboard() {
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-md w-8 h-8 flex items-center justify-center">
-              <span className="text-white font-bold">L</span>
-            </div>
+            <Logo mode={modes[currentModeIndex].toLowerCase()} size="md" />
             <h1 className="text-xl font-bold">LexiLearn AI</h1>
           </div>
 
@@ -119,32 +129,47 @@ export default function ParentDashboard() {
                 <div className="flex justify-between">
                   <span className="text-gray-500">Student ID:</span>
                   <span className="font-medium">{studentData.id}</span>
-    
                 </div>
                 <div className="flex justify-between items-center">
-                <span className="text-gray-500">Study Mode:</span>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={selectedModeIndex}
-                    onChange={handleModeChange}
-                    className="border border-blue-300 bg-white shadow-sm rounded-lg px-3 py-2 text-sm font-medium text-blue-700 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    {modes.map((mode, index) => (
-                      <option key={mode} value={index}>{mode}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              {showConfirm && (
-                <div className="mt-4 p-4 border rounded bg-yellow-50 text-sm text-gray-700">
-                  <p className="mb-2">Are you sure you want to switch to <strong>{modes[selectedModeIndex]}</strong> mode?</p>
-                  <div className="flex gap-4">
-                    <Button onClick={confirmChange} className="bg-green-600 text-white px-4 py-1 text-sm">Yes</Button>
-                    <Button onClick={cancelChange} variant="outline" className="text-sm">Cancel</Button>
+                  <span className="text-gray-500">Study Mode:</span>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={selectedModeIndex}
+                      onChange={handleModeChange}
+                      className="border border-blue-300 bg-white shadow-sm rounded-lg px-3 py-2 text-sm font-medium text-blue-700 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {modes.map((mode, index) => (
+                        <option key={mode} value={index}>
+                          {mode}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
-              )}
-            </div>
+                {showConfirm && (
+                  <div className="mt-4 p-4 border rounded bg-yellow-50 text-sm text-gray-700">
+                    <p className="mb-2">
+                      Are you sure you want to switch to{" "}
+                      <strong>{modes[selectedModeIndex]}</strong> mode?
+                    </p>
+                    <div className="flex gap-4">
+                      <Button
+                        onClick={confirmChange}
+                        className="bg-green-600 text-white px-4 py-1 text-sm"
+                      >
+                        Yes
+                      </Button>
+                      <Button
+                        onClick={cancelChange}
+                        variant="outline"
+                        className="text-sm"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -216,69 +241,72 @@ export default function ParentDashboard() {
                 <CardTitle>Course Progress</CardTitle>
               </CardHeader>
               <CardContent>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {studentData.courses.map((course, index) => {
-      let colorClasses = "";
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {studentData.courses.map((course, index) => {
+                    let colorClasses = "";
 
-      if (course.progress < 50) {
-        colorClasses = "bg-red-100 text-red-700";
-      } else if (course.progress <= 70) {
-        colorClasses = "bg-yellow-100 text-yellow-700";
-      } else {
-        colorClasses = "bg-green-100 text-green-700";
-      }
+                    if (course.progress < 50) {
+                      colorClasses = "bg-red-100 text-red-700";
+                    } else if (course.progress <= 70) {
+                      colorClasses = "bg-yellow-100 text-yellow-700";
+                    } else {
+                      colorClasses = "bg-green-100 text-green-700";
+                    }
 
-      return (
-        <div
-          key={index}
-          className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
-        >
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">{course.name}</h3>
-            <div className={`text-base px-3 py-1 rounded-full inline-block ${colorClasses}`}>
-              {course.message}
-            </div>
-          </div>
+                    return (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
+                      >
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-semibold">
+                            {course.name}
+                          </h3>
+                          <div
+                            className={`text-base px-3 py-1 rounded-full inline-block ${colorClasses}`}
+                          >
+                            {course.message}
+                          </div>
+                        </div>
 
-          <div className="relative w-20 h-20">
-            <svg className="w-full h-full" viewBox="0 0 36 36">
-              <circle
-                cx="18"
-                cy="18"
-                r="16"
-                fill="none"
-                stroke="#e5e7eb"
-                strokeWidth="4"
-              />
-              <circle
-                cx="18"
-                cy="18"
-                r="16"
-                fill="none"
-                stroke={
-                  course.progress < 50
-                    ? "#ef4444"
-                    : course.progress <= 70
-                    ? "#facc15"
-                    : "#22c55e"
-                }
-                strokeWidth="4"
-                strokeDasharray="100"
-                strokeDashoffset={100 - course.progress}
-                strokeLinecap="round"
-                transform="rotate(-90 18 18)"
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
-              {course.progress}%
-            </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</CardContent>
-
+                        <div className="relative w-20 h-20">
+                          <svg className="w-full h-full" viewBox="0 0 36 36">
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              stroke="#e5e7eb"
+                              strokeWidth="4"
+                            />
+                            <circle
+                              cx="18"
+                              cy="18"
+                              r="16"
+                              fill="none"
+                              stroke={
+                                course.progress < 50
+                                  ? "#ef4444"
+                                  : course.progress <= 70
+                                  ? "#facc15"
+                                  : "#22c55e"
+                              }
+                              strokeWidth="4"
+                              strokeDasharray="100"
+                              strokeDashoffset={100 - course.progress}
+                              strokeLinecap="round"
+                              transform="rotate(-90 18 18)"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-gray-800">
+                            {course.progress}%
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -288,97 +316,126 @@ export default function ParentDashboard() {
                 <CardTitle>Learning Recommendations</CardTitle>
               </CardHeader>
               <CardContent>
-  <div className="space-y-6">
-    {/* Mode Recommendation */}
-    <div className="flex items-start gap-4 p-6 bg-blue-50 border border-blue-200 rounded-xl shadow-sm">
-      <div className="text-blue-600 text-2xl">🎯</div>
-      <div>
-        <h3 className="text-lg font-bold text-blue-700 mb-1">Mode Recommendation</h3>
-        <p className="text-gray-700 leading-relaxed">
-          <span className="font-medium">{studentData.name.split(" ")[0]}</span> shows a <span className="font-semibold">40% improvement</span> when using <span className="text-blue-600 font-semibold">ADHD Mode</span>. 
-          We highly recommend enabling this mode consistently across all subjects to maximize focus and comprehension.
-        </p>
-      </div>
-    </div>
+                <div className="space-y-6">
+                  {/* Mode Recommendation */}
+                  <div className="flex items-start gap-4 p-6 bg-blue-50 border border-blue-200 rounded-xl shadow-sm">
+                    <div className="text-blue-600 text-2xl">🎯</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-blue-700 mb-1">
+                        Mode Recommendation
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        <span className="font-medium">
+                          {studentData.name.split(" ")[0]}
+                        </span>{" "}
+                        shows a{" "}
+                        <span className="font-semibold">40% improvement</span>{" "}
+                        when using{" "}
+                        <span className="text-blue-600 font-semibold">
+                          ADHD Mode
+                        </span>
+                        . We highly recommend enabling this mode consistently
+                        across all subjects to maximize focus and comprehension.
+                      </p>
+                    </div>
+                  </div>
 
-    {/* Study Pattern */}
-    <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-xl shadow-sm">
-      <div className="text-green-600 text-2xl">📅</div>
-      <div>
-        <h3 className="text-lg font-bold text-green-700 mb-1">Study Pattern</h3>
-        <p className="text-gray-700 leading-relaxed">
-          Performance peaks on <span className="font-semibold text-green-700">Tuesdays</span> and <span className="font-semibold text-green-700">Thursdays</span>. 
-          Consider scheduling more intensive subjects like <strong>Math</strong> and <strong>Science</strong> on these days for best results.
-        </p>
-      </div>
-    </div>
+                  {/* Study Pattern */}
+                  <div className="flex items-start gap-4 p-6 bg-green-50 border border-green-200 rounded-xl shadow-sm">
+                    <div className="text-green-600 text-2xl">📅</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-green-700 mb-1">
+                        Study Pattern
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        Performance peaks on{" "}
+                        <span className="font-semibold text-green-700">
+                          Tuesdays
+                        </span>{" "}
+                        and{" "}
+                        <span className="font-semibold text-green-700">
+                          Thursdays
+                        </span>
+                        . Consider scheduling more intensive subjects like{" "}
+                        <strong>Math</strong> and <strong>Science</strong> on
+                        these days for best results.
+                      </p>
+                    </div>
+                  </div>
 
-    {/* Subject Focus */}
-    <div className="flex items-start gap-4 p-6 bg-purple-50 border border-purple-200 rounded-xl shadow-sm">
-      <div className="text-purple-600 text-2xl">🔬</div>
-      <div>
-        <h3 className="text-lg font-bold text-purple-700 mb-1">Subject Focus</h3>
-        <p className="text-gray-700 leading-relaxed">
-          <span className="font-semibold">Chemistry</span> shows below average progress. Quiz scores indicate a lack of concept clarity. 
-          We recommend revisiting topics from <span className="font-medium">Chapter 2 to 4</span> 
-        </p>
-      </div>
-    </div>
-  </div>
-</CardContent>
-
-
+                  {/* Subject Focus */}
+                  <div className="flex items-start gap-4 p-6 bg-purple-50 border border-purple-200 rounded-xl shadow-sm">
+                    <div className="text-purple-600 text-2xl">🔬</div>
+                    <div>
+                      <h3 className="text-lg font-bold text-purple-700 mb-1">
+                        Subject Focus
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        <span className="font-semibold">Chemistry</span> shows
+                        below average progress. Quiz scores indicate a lack of
+                        concept clarity. We recommend revisiting topics from{" "}
+                        <span className="font-medium">Chapter 2 to 4</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="attendance" className="mt-6">
-          <Card>
-  <CardHeader className="flex flex-row items-center justify-between">
-    <CardTitle>Attendance Record</CardTitle>
-    <Button
-      className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow-sm transition-all duration-200"
-      asChild
-    >
-      <Link href="/attendance">View Detailed Attendance</Link>
-    </Button>
-  </CardHeader>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Attendance Record</CardTitle>
+                <Button
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow-sm transition-all duration-200"
+                  asChild
+                >
+                  <Link href="/attendance">View Detailed Attendance</Link>
+                </Button>
+              </CardHeader>
 
-  <CardContent>
-    <div className="space-y-6">
-      {/* Pie Chart */}
-      <div className="flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto">
-        <PieChart
-  data={[
-    { name: "Present", value: 42, color: "#22c55e" }, // ✅ Green
-    { name: "Absent", value: 3, color: "#facc15" },   // ✅ Yellow
-    { name: "Late", value: 5, color: "#ef4444" },     // ✅ Red
-  ]}
-/>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Pie Chart */}
+                  <div className="flex items-center justify-center">
+                    <div className="w-full max-w-md mx-auto">
+                      <PieChart
+                        data={[
+                          { name: "Present", value: 42, color: "#22c55e" }, // ✅ Green
+                          { name: "Absent", value: 3, color: "#facc15" }, // ✅ Yellow
+                          { name: "Late", value: 5, color: "#ef4444" }, // ✅ Red
+                        ]}
+                      />
+                    </div>
+                  </div>
 
-        </div>
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-        <div className="p-5 bg-emerald-50 rounded-lg border border-emerald-100 shadow-sm">
-          <div className="text-3xl font-bold text-emerald-500">42</div>
-          <div className="text-base font-medium text-emerald-600">Present</div>
-        </div>
-        <div className="p-5 bg-amber-50 rounded-lg border border-amber-100 shadow-sm">
-          <div className="text-3xl font-bold text-amber-500">3</div>
-          <div className="text-base font-medium text-amber-600">Absent</div>
-        </div>
-        <div className="p-5 bg-rose-50 rounded-lg border border-rose-100 shadow-sm">
-          <div className="text-3xl font-bold text-rose-500">5</div>
-          <div className="text-base font-medium text-rose-600">Late</div>
-        </div>
-      </div>
-    </div>
-  </CardContent>
-</Card>
-
-
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div className="p-5 bg-emerald-50 rounded-lg border border-emerald-100 shadow-sm">
+                      <div className="text-3xl font-bold text-emerald-500">
+                        42
+                      </div>
+                      <div className="text-base font-medium text-emerald-600">
+                        Present
+                      </div>
+                    </div>
+                    <div className="p-5 bg-amber-50 rounded-lg border border-amber-100 shadow-sm">
+                      <div className="text-3xl font-bold text-amber-500">3</div>
+                      <div className="text-base font-medium text-amber-600">
+                        Absent
+                      </div>
+                    </div>
+                    <div className="p-5 bg-rose-50 rounded-lg border border-rose-100 shadow-sm">
+                      <div className="text-3xl font-bold text-rose-500">5</div>
+                      <div className="text-base font-medium text-rose-600">
+                        Late
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>

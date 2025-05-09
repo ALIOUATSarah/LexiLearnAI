@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import { Play, Clock, Award, BookOpen } from "lucide-react";
-import Logo from "@/app/components/Logo";
+import Logo from "@/components/Logo";
 
 export default function Lessons() {
   const [mode, setMode] = useState("normal");

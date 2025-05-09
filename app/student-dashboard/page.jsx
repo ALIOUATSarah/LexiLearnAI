@@ -40,7 +40,7 @@ import {
   ArrowUpCircle,
   Brain,
 } from "lucide-react";
-import Logo from "@/app/components/Logo";
+import Logo from "@/components/Logo";
 import { useToast } from "@/hooks/use-toast";
 
 export default function StudentDashboard() {
@@ -1255,43 +1255,42 @@ export default function StudentDashboard() {
           </div>
 
           {/* Tabs Section */}
-          
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-  <TabsList className="flex w-full overflow-x-auto whitespace-nowrap no-scrollbar gap-2 p-1 mb-6 bg-transparent">
-    <TabsTrigger
-      value="overview"
-      className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
-                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
-                 shadow-sm transition-all"
-    >
-      Quiz History
-    </TabsTrigger>
-    <TabsTrigger
-      value="review"
-      className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
-                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
-                 shadow-sm transition-all"
-    >
-      Spaced Review
-    </TabsTrigger>
-    <TabsTrigger
-      value="achievements"
-      className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
-                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
-                 shadow-sm transition-all"
-    >
-      Achievements
-    </TabsTrigger>
-    <TabsTrigger
-      value="lessons"
-      className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
-                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
-                 shadow-sm transition-all"
-    >
-      My Lessons
-    </TabsTrigger>
-  </TabsList>
 
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+            <TabsList className="flex w-full overflow-x-auto whitespace-nowrap no-scrollbar gap-2 p-1 mb-6 bg-transparent">
+              <TabsTrigger
+                value="overview"
+                className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
+                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
+                 shadow-sm transition-all"
+              >
+                Quiz History
+              </TabsTrigger>
+              <TabsTrigger
+                value="review"
+                className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
+                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
+                 shadow-sm transition-all"
+              >
+                Spaced Review
+              </TabsTrigger>
+              <TabsTrigger
+                value="achievements"
+                className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
+                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
+                 shadow-sm transition-all"
+              >
+                Achievements
+              </TabsTrigger>
+              <TabsTrigger
+                value="lessons"
+                className="px-4 py-2.5 text-sm font-medium rounded-md bg-white hover:bg-gray-50 
+                 data-[state=active]:bg-[#6C48C5] data-[state=active]:text-white 
+                 shadow-sm transition-all"
+              >
+                My Lessons
+              </TabsTrigger>
+            </TabsList>
 
             <TabsContent value="overview" className="mt-6">
               <Card>
