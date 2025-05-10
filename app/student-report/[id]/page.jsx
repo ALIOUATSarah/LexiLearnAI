@@ -21,7 +21,7 @@ export default function StudentReport() {
   const studentData = {
     S12345: {
       id: "S12345",
-      name: "Sarah Johnson",
+      name: "Alex Johnson",
       grade: "10th Grade",
       recommendedMode: "Dyslexia",
       progress: 95,
