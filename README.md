@@ -255,8 +255,71 @@ lexilearn-ai/
 - Write meaningful commit messages
 
 ## Business Model
+Here’s a clear, structured, and concise explanation of LexiLearn AI’s Business Model:
 
-????
+--------------
+
+LexiLearn AI – Business Model Overview
+
+1. Value Proposition:
+	•	Inclusive, personalized online learning platform clearly designed for all students (regular, Dyslexia, ADHD).
+	•	Instant AI-powered personalization of lessons and study materials.
+	•	Automatic generation of clear, concise notes to simplify studying.
+	•	Detailed progress analysis clearly showing performance trends and personalized recommendations for teachers and parents.
+
+2. Customer Segments:
+	•	Schools and educational institutions
+	•	Individual students and their parents
+	•	Government educational programs and NGOs
+	•	Universities and research centers
+	•	Corporate sponsors and technology partners
+
+3. Revenue Streams:
+	•	Annual subscription fees paid by schools/universities per student.
+	•	Premium subscriptions from parents/students (advanced features).
+	•	Government or NGO funding for special education initiatives.
+	•	Corporate sponsorships and research collaborations for AI innovation.
+
+4. Customer Relationships:
+	•	User-friendly, responsive customer support
+	•	Regular progress updates and transparent communication
+	•	Continuous improvement based on user feedback
+
+5. Channels:
+	•	Direct outreach and demonstrations at schools and institutions
+	•	Online presence (website, app)
+	•	Digital marketing (social media, online ads)
+	•	Educational events, seminars, and partnerships
+
+6. Key Activities:
+	•	Continuous development and updating of the AI platform
+	•	AI-driven personalization and analytics
+	•	Marketing, sales, and customer support
+	•	Maintaining clear and regular communication with users (students, teachers, parents)
+
+7. Key Resources:
+	•	Expert AI and software developers
+	•	Educational content creators
+	•	Reliable, cloud-based infrastructure
+	•	Funding from investors and institutional partners
+	•	Effective marketing and customer support teams
+
+8. Key Partners:
+	•	Educational institutions (schools, universities)
+	•	AI research centers and universities
+	•	Government educational departments and NGOs
+	•	Technology and cloud service providers
+	•	Corporate sponsors and educational innovators
+
+9. Cost Structure:
+	•	Salaries for developers, AI experts, and content creators
+	•	Platform development and maintenance costs (AI tech, cloud infrastructure)
+	•	Marketing and customer outreach expenses
+	•	Administrative and operational costs
+
+----------------
+
+This clearly outlines the business model LexiLearn AI uses to sustainably grow and support personalized learning for all students, especially those facing learning challenges.
 
 ## Future Development
 
