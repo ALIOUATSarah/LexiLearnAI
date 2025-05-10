@@ -255,11 +255,6 @@ lexilearn-ai/
 - Write meaningful commit messages
 
 ## Business Model
-Here’s a clear, structured, and concise explanation of LexiLearn AI’s Business Model:
-
---------------
-
-LexiLearn AI – Business Model Overview
 
 1. Value Proposition:
 	•	Inclusive, personalized online learning platform clearly designed for all students (regular, Dyslexia, ADHD).
@@ -316,10 +311,6 @@ LexiLearn AI – Business Model Overview
 	•	Platform development and maintenance costs (AI tech, cloud infrastructure)
 	•	Marketing and customer outreach expenses
 	•	Administrative and operational costs
-
-----------------
-
-This clearly outlines the business model LexiLearn AI uses to sustainably grow and support personalized learning for all students, especially those facing learning challenges.
 
 ## Future Development
 
